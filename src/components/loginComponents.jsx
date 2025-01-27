@@ -1,16 +1,28 @@
 // src/components/Login.jsx
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuthStore } from "../store/authStore";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
-  const { login, isLoading, error } = useAuthStore();
+  const { login, isLoading, error, user } = useAuthStore();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const navigate = useNavigate(); // React Router's hook to navigate programmatically
+  // useEffect to navigate to dashboard when user is set
+  useEffect(() => {
+    if (user) {
+      navigate("/dashboard"); // Redirect to dashboard when user is logged in
+    }
+  }, [user, navigate]); // Run effect when `user` changes
   // Function to handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     await login(email, password);
+    // If login is successful, navigate to the dashboard
+    console.log(user, "updateduser");
+    if (!error && user) {
+      navigate("/dashboard"); // Navigate to the dashboard page
+    }
   };
 
   return (

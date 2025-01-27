@@ -1,21 +1,21 @@
+import axios from "axios";
+
 export const loginUser = async (email, password) => {
   try {
-    console.log("inservice");
-    const response = await fetch("https://your-backend-api.com/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password }),
+    console.log("in service");
+
+    const response = await axios.post("http://localhost:5000/api/auth/login", {
+      email,
+      password,
     });
 
-    if (!response.ok) {
-      throw new Error("Invalid credentials");
-    }
-
-    const data = await response.json();
-    return data;
+    // Axios automatically parses the response as JSON
+    console.log(response, "thisthe res");
+    return response.data;
   } catch (error) {
-    throw new Error(error.message);
+    // If the error is not a network error, you can handle it here
+    throw new Error(
+      error.response ? error.response.data.message : error.message
+    );
   }
 };

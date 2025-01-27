@@ -12,6 +12,7 @@ export const useAuthStore = () => {
 
     try {
       const data = await loginUser(email, password);
+      console.log(data, "instore");
       setUser(data); // Store user data (e.g., token, user details)
       localStorage.setItem("authToken", data.token);
     } catch (error) {
