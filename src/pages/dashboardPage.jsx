@@ -22,7 +22,7 @@ function Dashboard() {
   return (
     <div className="flex flex-col md:flex-row h-screen">
       {/* Sidebar */}
-      <div className="md:w-1/4 bg-gray-800 text-white md:h-full h-16 md:static fixed bottom-0 w-full">
+      <div className="md:w-1/4 bg-gray-800 text-white md:h-full h-16 md:static fixed bottom-0 w-full z-1">
         <div className="md:p-4 flex justify-around md:flex-col">
           {["Profile", "Website Themes/Options", "Properties", "Log Out"].map(
             (menu) => (
