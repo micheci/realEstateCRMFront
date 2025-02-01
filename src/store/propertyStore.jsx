@@ -1,28 +1,50 @@
-import { useState, useEffect } from "react";
-import { fetchProperties } from "../service/propertyService"; // Import the service
+import { useState } from "react";
+import {
+  fetchProperties,
+  getPropertyByIdService,
+} from "../service/propertyService";
 
 // Custom hook for managing property state and fetching data
 const usePropertyStore = () => {
-  const [properties, setProperties] = useState([]); // State to store properties
-  const [loading, setLoading] = useState(true); // Loading state
+  const [properties, setProperties] = useState([]); // State to store all properties
+  const [property, setProperty] = useState(null); // State to store a single property
+  const [loading, setLoading] = useState(false); // Loading state
   const [error, setError] = useState(null); // Error state
 
-  useEffect(() => {
-    const getProperties = async () => {
-      try {
-        const data = await fetchProperties();
-        setProperties(data.data); // Store the fetched properties in state
-        setLoading(false); // Set loading to false once data is fetched
-      } catch (err) {
-        setError(err.message); // Handle any errors
-        setLoading(false); // Set loading to false on error
-      }
-    };
+  // Function to fetch all properties
+  const getAllProperties = async () => {
+    setLoading(true);
+    try {
+      const data = await fetchProperties();
+      setProperties(data.data); // Store fetched properties
+      setLoading(false);
+    } catch (err) {
+      setError(err.message);
+      setLoading(false);
+    }
+  };
 
-    getProperties(); // Fetch properties when the component mounts
-  }, []); // Empty dependency array ensures it runs only once when the component mounts
+  // Function to fetch a single property by ID
+  const getPropertyById = async (propertyID) => {
+    setLoading(true);
+    try {
+      const data = await getPropertyByIdService(propertyID);
+      setProperty(data.data); // Store the single property
+      setLoading(false);
+    } catch (err) {
+      setError(err.message);
+      setLoading(false);
+    }
+  };
 
-  return { properties, loading, error }; // Return the properties state, loading, and error states
+  return {
+    properties,
+    property,
+    getAllProperties,
+    getPropertyById,
+    loading,
+    error,
+  };
 };
 
 export default usePropertyStore;

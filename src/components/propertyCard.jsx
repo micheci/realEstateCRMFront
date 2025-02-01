@@ -1,8 +1,10 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const PropertyCard = ({ property }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const navigate = useNavigate();
 
   const nextImage = () => {
     setCurrentImageIndex((prevIndex) =>
@@ -17,7 +19,10 @@ const PropertyCard = ({ property }) => {
   };
 
   return (
-    <div className="bg-white p-4 shadow rounded-lg relative flex flex-col">
+    <div
+      className="bg-white p-4 shadow rounded-lg relative flex flex-col"
+      onClick={() => navigate(`/properties/${property._id}`)}
+    >
       {/* Header with Edit Button */}
       <div className="flex justify-between">
         <h3 className="font-bold text-lg">{property.title}</h3>
