@@ -1,12 +1,17 @@
 import usePropertyStore from "../store/propertyStore";
 import PropertyCard from "../components/propertyCard"; // Importing PropertyCard
+import { useEffect } from "react";
 
 const PropertiesPage = () => {
-  const { properties, loading, error } = usePropertyStore(); // Use the store hook
-
+  const store = usePropertyStore();
+  const { properties, getAllProperties, loading, error } = store;
+  useEffect(() => {
+    getAllProperties();
+  }, []);
   if (loading) return <div>Loading properties...</div>;
   if (error) return <div>Error: {error}</div>;
 
+  console.log(properties, "LR");
   return (
     <div>
       <h2 className="text-xl font-semibold mb-4">Manage Your Properties</h2>

@@ -5,7 +5,7 @@ import usePropertyStore from "../store/propertyStore";
 const PropertyEditPage = () => {
   const { propertyId } = useParams();
   const store = usePropertyStore();
-  const { property, getPropertyById, loading, error } = store;
+  const { property, getPropertyById, editPropertyById, loading, error } = store;
 
   const [formData, setFormData] = useState({
     // Basic Details
@@ -16,13 +16,15 @@ const PropertyEditPage = () => {
     state: "",
     zip: "",
     images: [], // Existing images from backend
+    yearBuilt: "", // Year the property was built
+    sqftArea: "", // area of property
+    bedrooms: "",
+    bathrooms: "",
 
     // Property Features
     features: {
-      yearBuilt: "", // Year the property was built
       remodeled: false, // Whether the property has been remodeled
-      flooringType: "", // Flooring material
-      ceilingHeight: "", // Ceiling height in feet
+
       attic: false, // Whether there's an attic
       basement: false, // Whether there's a basement
       finishedBasement: false, // Whether the basement is finished
@@ -139,7 +141,7 @@ const PropertyEditPage = () => {
     e.preventDefault();
 
     const formDataToSend = new FormData();
-    formDataToSend.append("title", "TEST");
+    formDataToSend.append("title", formData.title);
     formDataToSend.append("price", formData.price);
     formDataToSend.append("description", formData.description);
     formDataToSend.append("city", formData.city);
@@ -147,7 +149,8 @@ const PropertyEditPage = () => {
     formDataToSend.append("zip", formData.zip);
     formDataToSend.append("bedrooms", formData.bedrooms);
     formDataToSend.append("bathrooms", formData.bathrooms);
-    formDataToSend.append("area", formData.area);
+    formDataToSend.append("sqftArea", formData.sqftArea);
+    formDataToSend.append("yearBuild", formData.yearBuilt);
     formDataToSend.append("features", JSON.stringify(formData.features));
 
     // 🔹 Check if selectedFiles contains images
@@ -166,7 +169,7 @@ const PropertyEditPage = () => {
     });
 
     // Append removed images
-    formDataToSend.append("removedImages", JSON.stringify(removedImages));
+    //formDataToSend.append("removedImages", JSON.stringify(removedImages));
 
     // 🔹 Log FormData contents
     console.log("FormData entries:");
@@ -176,7 +179,7 @@ const PropertyEditPage = () => {
 
     try {
       // Replace with actual API call
-      // Example: await fetch(`/api/properties/${propertyId}`, { method: "PUT", body: formDataToSend });
+      editPropertyById(formDataToSend, propertyId);
     } catch (error) {
       console.error("Error updating property:", error);
     }
@@ -269,6 +272,7 @@ const PropertyEditPage = () => {
               value={formData.bedrooms}
               onChange={handleChange}
               className="w-full border p-2 rounded-md"
+              required
             />
           </div>
           <div>
@@ -279,6 +283,7 @@ const PropertyEditPage = () => {
               value={formData.bathrooms}
               onChange={handleChange}
               className="w-full border p-2 rounded-md"
+              required
             />
           </div>
         </div>
@@ -288,10 +293,11 @@ const PropertyEditPage = () => {
           <label className="block font-medium">Area (sq ft)</label>
           <input
             type="number"
-            name="area"
-            value={formData.area}
+            name="sqftArea"
+            value={formData.sqftArea}
             onChange={handleChange}
             className="w-full border p-2 rounded-md"
+            required
           />
         </div>
         {/*Year build  */}
@@ -299,21 +305,11 @@ const PropertyEditPage = () => {
           <label className="block font-medium">Year Build</label>
           <input
             type="text"
-            name="title"
+            name="yearBuilt"
             value={formData.features.yearBuilt}
             onChange={handleChange}
             className="w-full border p-2 rounded-md"
-          />
-        </div>
-        {/*Garage capacity  */}
-        <div>
-          <label className="block font-medium">Garage capacity</label>
-          <input
-            type="text"
-            name="title"
-            value={formData.features.garageCapacity}
-            onChange={handleChange}
-            className="w-full border p-2 rounded-md"
+            required
           />
         </div>
 

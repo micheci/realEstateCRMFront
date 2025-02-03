@@ -2,6 +2,7 @@ import { useState } from "react";
 import {
   fetchProperties,
   getPropertyByIdService,
+  editPropertyByIdService,
 } from "../service/propertyService";
 const hardcodedProperty = {
   id: "1",
@@ -79,11 +80,28 @@ const usePropertyStore = () => {
     }
   };
 
+  // Function to edit a property
+  const editPropertyById = async (formData, propertyID) => {
+    setLoading(true);
+    try {
+      const data = await editPropertyByIdService(formData, propertyID);
+      console.log("was updated");
+      //setProperty(data.data); // Store the single property
+      //setProperty(hardcodedProperty); // Store the single property
+
+      setLoading(false);
+    } catch (err) {
+      setError(err.message);
+      setLoading(false);
+    }
+  };
+
   return {
     properties,
     property,
     getAllProperties,
     getPropertyById,
+    editPropertyById,
     loading,
     error,
   };
