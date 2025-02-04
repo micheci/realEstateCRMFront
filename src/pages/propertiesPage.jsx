@@ -3,7 +3,6 @@ import PropertyCard from "../components/propertyCard"; // Importing PropertyCard
 import { useEffect } from "react";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
-import Box from "@mui/material/Box";
 
 const PropertiesPage = () => {
   const store = usePropertyStore();

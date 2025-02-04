@@ -1,5 +1,5 @@
 import { useState } from "react";
-import PropertiesPage from "./propertiesPage";
+import PropertiesHome from "./propertyHome";
 
 function Dashboard() {
   const [activeMenu, setActiveMenu] = useState("Profile"); // Default menu item
@@ -11,7 +11,9 @@ function Dashboard() {
       case "Website Themes/Options":
         return <div>Customize your website themes and options here.</div>;
       case "Properties":
-        return <PropertiesPage />;
+        return <PropertiesHome />;
+
+      //return <PropertiesPage />;
       case "Log Out":
         return <div>You have logged out.</div>;
       default:
