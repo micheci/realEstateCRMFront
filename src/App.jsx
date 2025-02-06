@@ -16,7 +16,7 @@ function App() {
           path="/properties/:propertyId"
           element={<PropertyDetailPage />}
         />{" "}
-        <Route path="/allProperties" element={<PropertiesPage />} />
+        <Route path="/properties/allProperties" element={<PropertiesPage />} />
         {/* New Route */}
         {/* Add other routes here */}
       </Routes>
