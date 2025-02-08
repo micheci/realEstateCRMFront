@@ -10,6 +10,8 @@ import {
   MenuItem,
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
+import usePropertyStore from "../store/propertyStore";
+import { useNavigate } from "react-router-dom";
 
 const AddPropertyPage = () => {
   const [propertyData, setPropertyData] = useState({
@@ -22,6 +24,7 @@ const AddPropertyPage = () => {
     area: "",
     images: [],
     city: "",
+    street: "",
     state: "",
     zip: "",
     garage: false,
@@ -42,6 +45,8 @@ const AddPropertyPage = () => {
     walkInClosets: false,
   });
 
+  const { createProperty } = usePropertyStore();
+  const navigate = useNavigate();
   const handleChange = (e) => {
     setPropertyData({ ...propertyData, [e.target.name]: e.target.value });
   };
@@ -63,10 +68,30 @@ const AddPropertyPage = () => {
     setPropertyData({ ...propertyData, images: files });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Submitting Property:", propertyData);
-    // Handle API call to upload property details
+
+    const formData = new FormData();
+
+    // Append all property data (except images)
+    Object.keys(propertyData).forEach((key) => {
+      if (key === "images") return; // Skip images, handle separately below
+      formData.append(key, propertyData[key]);
+    });
+
+    // Append image files separately
+    propertyData.images.forEach((image) => {
+      formData.append("images", image);
+    });
+
+    console.log("Submitting FormData:", formData);
+
+    const result = await createProperty(formData);
+    console.log(result.data._id, "PROPERTYID");
+    console.log(result.success, "BOOLEAN");
+    if (result.success) {
+      navigate(`properties/${result.data._id}`);
+    }
   };
 
   return (
@@ -158,6 +183,17 @@ const AddPropertyPage = () => {
                 fullWidth
                 required
                 value={propertyData.city}
+                onChange={handleChange}
+              />
+            </Grid>
+
+            <Grid item xs={12} sm={4}>
+              <TextField
+                label="Street"
+                name="street"
+                fullWidth
+                required
+                value={propertyData.street}
                 onChange={handleChange}
               />
             </Grid>

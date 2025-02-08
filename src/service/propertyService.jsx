@@ -72,3 +72,25 @@ export const editPropertyByIdService = async (formdata, propertyID) => {
     );
   }
 };
+
+//create new property
+export const createPropertyService = async (formdata) => {
+  try {
+    // Retrieve the auth token (e.g., from localStorage, sessionStorage, or state management)
+    const token = localStorage.getItem("authToken"); // Replace with how you store your token
+
+    // Make the GET request with the token included in the Authorization header
+    const response = await axios.post(API_URL, formdata, {
+      headers: {
+        Authorization: `Bearer ${token}`, // Include the token as a Bearer token
+      },
+    });
+    console.log(response.data, "getting ONE property inservice");
+    return response.data; // Return the response data
+  } catch (error) {
+    // Handle and throw errors
+    throw new Error(
+      error.response?.data?.message || "Failed to fetch properties"
+    );
+  }
+};

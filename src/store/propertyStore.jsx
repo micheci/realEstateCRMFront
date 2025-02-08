@@ -3,6 +3,7 @@ import {
   fetchProperties,
   getPropertyByIdService,
   editPropertyByIdService,
+  createPropertyService,
 } from "../service/propertyService";
 const hardcodedProperty = {
   id: "1",
@@ -96,12 +97,30 @@ const usePropertyStore = () => {
     }
   };
 
+  // Function to add a new property
+  const createProperty = async (formData) => {
+    setLoading(true);
+    try {
+      const data = await createPropertyService(formData);
+      console.log(data, "was created");
+      //setProperty(data.data); // Store the single property
+      //setProperty(hardcodedProperty); // Store the single property
+
+      setLoading(false);
+      return data;
+    } catch (err) {
+      setError(err.message);
+      setLoading(false);
+    }
+  };
+
   return {
     properties,
     property,
     getAllProperties,
     getPropertyById,
     editPropertyById,
+    createProperty,
     loading,
     error,
   };
