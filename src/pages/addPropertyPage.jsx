@@ -90,7 +90,7 @@ const AddPropertyPage = () => {
     console.log(result.data._id, "PROPERTYID");
     console.log(result.success, "BOOLEAN");
     if (result.success) {
-      navigate(`properties/${result.data._id}`);
+      navigate(`/properties/${result.data._id}`);
     }
   };
 
