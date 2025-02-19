@@ -18,6 +18,23 @@ const propertyData = {
     "https://via.placeholder.com/150",
   ],
   agentId: "789", // Reference to the agent
+  features: {
+    garage: true,
+    parkingSpaces: 2,
+    swimmingPool: false,
+    fireplace: true,
+    basement: true,
+    finishedBasement: false,
+    attic: true,
+    airConditioning: true,
+    remodeled: false,
+    securitySystem: true,
+    smartHome: false,
+    fence: true,
+    hoaFees: 250,
+    petsAllowed: true,
+    walkInClosets: true,
+  },
 };
 
 const agentData = {
