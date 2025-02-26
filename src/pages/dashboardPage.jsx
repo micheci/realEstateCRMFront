@@ -1,5 +1,6 @@
 import { useState } from "react";
 import PropertiesHome from "./propertyHome";
+import ProfilePage from "./profilePage";
 
 function Dashboard() {
   const [activeMenu, setActiveMenu] = useState("Profile"); // Default menu item
@@ -7,7 +8,7 @@ function Dashboard() {
   const renderContent = () => {
     switch (activeMenu) {
       case "Profile":
-        return <div>Your Profile content goes here.</div>;
+        return <ProfilePage />;
       case "Website Themes/Options":
         return <div>Customize your website themes and options here.</div>;
       case "Properties":

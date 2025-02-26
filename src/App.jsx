@@ -3,6 +3,7 @@ import LoginPage from "./pages/loginPage";
 import DashboardPage from "./pages/dashboardPage";
 import PropertyDetailPage from "./pages/propertyDetailPage";
 import PropertiesPage from "./pages/propertiesPage";
+import "leaflet/dist/leaflet.css";
 
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
