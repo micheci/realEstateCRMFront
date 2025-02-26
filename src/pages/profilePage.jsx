@@ -47,6 +47,7 @@ const ProfilePage = () => {
     setMessage("");
 
     console.log(profileData);
+    setLoading(false);
   };
 
   return (

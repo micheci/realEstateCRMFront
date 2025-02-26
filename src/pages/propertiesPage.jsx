@@ -21,7 +21,7 @@ const PropertiesPage = () => {
       <h2 className="text-xl font-semibold mb-4">Manage Your Properties</h2>
       <p>Here you can manage all your listed properties.</p>
 
-      <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-3">
+      <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
         {properties.length > 0 ? (
           properties.map((property) => (
             <PropertyCard key={property._id} property={property} />
