@@ -3,6 +3,7 @@ import LoginPage from "./pages/loginPage";
 import DashboardPage from "./pages/dashboardPage";
 import PropertyDetailPage from "./pages/propertyDetailPage";
 import PropertiesPage from "./pages/propertiesPage";
+import EditPropertyPage from "./pages/editPropertyPage";
 import "leaflet/dist/leaflet.css";
 
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
@@ -19,6 +20,10 @@ function App() {
             path="/properties/:propertyId"
             element={<PropertyDetailPage />}
           />{" "}
+          <Route
+            path="/edit/properties/:propertyId"
+            element={<EditPropertyPage />}
+          />
           <Route
             path="/properties/allProperties"
             element={<PropertiesPage />}
