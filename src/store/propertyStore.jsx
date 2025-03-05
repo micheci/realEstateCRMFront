@@ -4,6 +4,7 @@ import {
   getPropertyByIdService,
   editPropertyByIdService,
   createPropertyService,
+  editPropertyImagesService,
 } from "../service/propertyService";
 const hardcodedProperty = {
   id: "1",
@@ -70,9 +71,8 @@ const usePropertyStore = () => {
   const getPropertyById = async (propertyID) => {
     setLoading(true);
     try {
-      //const data = await getPropertyByIdService(propertyID);
-      //setProperty(data.data); // Store the single property
-      setProperty(hardcodedProperty); // Store the single property
+      const data = await getPropertyByIdService(propertyID);
+      setProperty(data.data); // Store the single property
 
       setLoading(false);
     } catch (err) {
@@ -114,6 +114,21 @@ const usePropertyStore = () => {
     }
   };
 
+  //fiunction to edit images/add to images
+  const editPropertyImages = async (formData, propertyID) => {
+    setLoading(true);
+    try {
+      const data = await editPropertyImagesService(formData, propertyID);
+      console.log("Images was updated");
+      //setProperty(data.data); // Store the single property
+      //setProperty(hardcodedProperty); // Store the single property
+
+      setLoading(false);
+    } catch (err) {
+      setError(err.message);
+      setLoading(false);
+    }
+  };
   return {
     properties,
     property,
@@ -121,6 +136,7 @@ const usePropertyStore = () => {
     getPropertyById,
     editPropertyById,
     createProperty,
+    editPropertyImages,
     loading,
     error,
   };

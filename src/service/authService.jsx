@@ -9,8 +9,6 @@ export const loginUser = async (email, password) => {
       password,
     });
 
-    // Axios automatically parses the response as JSON
-    console.log(response, "thisthe res");
     return response.data;
   } catch (error) {
     // If the error is not a network error, you can handle it here

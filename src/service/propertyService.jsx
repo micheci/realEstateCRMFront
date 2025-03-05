@@ -35,7 +35,6 @@ export const getPropertyByIdService = async (propertyID) => {
         Authorization: `Bearer ${token}`, // Include the token as a Bearer token
       },
     });
-    console.log(response.data, "getting ONE property inservice");
     return response.data; // Return the response data
   } catch (error) {
     // Handle and throw errors
@@ -53,7 +52,7 @@ export const editPropertyByIdService = async (formdata, propertyID) => {
 
     // Make the PATCH request with the form data and headers
     const response = await axios.patch(
-      `${API_URL}/${propertyID}`, // URL with property ID
+      `${API_URL}/67989c5ce2d22574df770635`, // URL with property ID
       formdata, // Send form data in the request body
       {
         headers: {
@@ -85,6 +84,32 @@ export const createPropertyService = async (formdata) => {
         Authorization: `Bearer ${token}`, // Include the token as a Bearer token
       },
     });
+    console.log(response.data, "getting ONE property inservice");
+    return response.data; // Return the response data
+  } catch (error) {
+    // Handle and throw errors
+    throw new Error(
+      error.response?.data?.message || "Failed to fetch properties"
+    );
+  }
+};
+
+//edit images/add images
+export const editPropertyImagesService = async (formdata, propertyID) => {
+  try {
+    // Retrieve the auth token (e.g., from localStorage, sessionStorage, or state management)
+    const token = localStorage.getItem("authToken"); // Replace with how you store your token
+
+    // Make the GET request with the token included in the Authorization header
+    const response = await axios.patch(
+      `${API_URL}/images/${propertyID}`, // URL with property ID
+      formdata, // Send form data in the request body
+      {
+        headers: {
+          Authorization: `Bearer ${token}`, // Include the auth token
+        },
+      }
+    );
     console.log(response.data, "getting ONE property inservice");
     return response.data; // Return the response data
   } catch (error) {

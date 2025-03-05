@@ -7,18 +7,17 @@ import {
   Container,
   FormControlLabel,
   Checkbox,
-  MenuItem,
+  Grid,
 } from "@mui/material";
-import Grid from "@mui/material/Grid2";
 import usePropertyStore from "../store/propertyStore";
 import { useNavigate } from "react-router-dom";
 
 const AddPropertyPage = () => {
   const [propertyData, setPropertyData] = useState({
     title: "",
+    address: "",
     description: "",
     price: "",
-    // agentId: "",
     bedrooms: "",
     bathrooms: "",
     area: "",
@@ -35,16 +34,15 @@ const AddPropertyPage = () => {
     attic: false,
     airConditioning: false,
     remodeled: false,
-    appliancesIncluded: [],
-    outdoorSpace: "",
     securitySystem: false,
     smartHome: false,
     fence: false,
-    hoaFees: "",
     petsAllowed: false,
     walkInClosets: false,
+    hoaFees: "",
+    outdoorSpace: "",
   });
-
+  const [imagesState, setImagesState] = useState([]);
   const { createProperty } = usePropertyStore();
   const navigate = useNavigate();
   const handleChange = (e) => {
@@ -55,52 +53,55 @@ const AddPropertyPage = () => {
     setPropertyData({ ...propertyData, [e.target.name]: e.target.checked });
   };
 
-  const handleArrayChange = (e) => {
-    const value = e.target.value;
-    setPropertyData({
-      ...propertyData,
-      appliancesIncluded: typeof value === "string" ? value.split(",") : value,
-    });
-  };
-
-  const handleImageUpload = (e) => {
-    const files = Array.from(e.target.files);
-    setPropertyData({ ...propertyData, images: files });
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const formData = new FormData();
-
-    // Append all property data (except images)
-    Object.keys(propertyData).forEach((key) => {
-      if (key === "images") return; // Skip images, handle separately below
-      formData.append(key, propertyData[key]);
-    });
-
-    // Append image files separately
-    propertyData.images.forEach((image) => {
-      formData.append("images", image);
-    });
-
-    console.log("Submitting FormData:", formData);
-
-    const result = await createProperty(formData);
-    console.log(result.data._id, "PROPERTYID");
-    console.log(result.success, "BOOLEAN");
+    const result = await createProperty(propertyData);
     if (result.success) {
       navigate(`/properties/${result.data._id}`);
     }
   };
 
-  return (
-    <Container sx={{ paddingY: 4 }}>
-      <Typography variant="h4" gutterBottom>
-        Add New Property
-      </Typography>
+  const handleImageUpload = (e) => {
+    const files = Array.from(e.target.files);
+    console.log(files, "imagefiles");
+    setImagesState(files);
+  };
 
-      <Paper elevation={4} sx={{ padding: 4 }}>
+  const handleSubmitImages = async () => {
+    const formData = new FormData();
+
+    // Append images to formData to send to the backend
+    imagesState.forEach((imageFile) => {
+      formData.append("images", imageFile);
+    });
+    for (let pair of formData.entries()) {
+      console.log(pair[0] + ": " + pair[1]); // Log the key-value pairs
+      console.log(pair[0] + ": " + pair[1].name); // Log the file name
+    }
+    // try {
+    //   const response = await fetch("YOUR_BACKEND_URL/upload", {
+    //     method: "POST",
+    //     body: formData,
+    //   });
+    //   const data = await response.json();
+
+    //   if (data.success) {
+    //     console.log("Images uploaded successfully!");
+    //     // You can update the propertyData with the uploaded image URLs if necessary
+    //   } else {
+    //     console.error("Error uploading images:", data.message);
+    //   }
+    // } catch (error) {
+    //   console.error("Upload failed", error);
+    // }
+  };
+
+  return (
+    <Container sx={{ paddingY: 4, display: "flex", justifyContent: "center" }}>
+      <Paper elevation={4} sx={{ padding: 4, width: "100%", maxWidth: 600 }}>
+        <Typography variant="h4" gutterBottom>
+          Add New Property
+        </Typography>
         <form onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
@@ -113,7 +114,16 @@ const AddPropertyPage = () => {
                 onChange={handleChange}
               />
             </Grid>
-
+            <Grid item xs={12}>
+              <TextField
+                label="Address"
+                name="address"
+                fullWidth
+                required
+                value={propertyData.address}
+                onChange={handleChange}
+              />
+            </Grid>
             <Grid item xs={12}>
               <TextField
                 label="Description"
@@ -126,7 +136,6 @@ const AddPropertyPage = () => {
                 onChange={handleChange}
               />
             </Grid>
-
             <Grid item xs={12} sm={6}>
               <TextField
                 label="Price ($)"
@@ -138,8 +147,7 @@ const AddPropertyPage = () => {
                 onChange={handleChange}
               />
             </Grid>
-
-            <Grid item xs={12} sm={4}>
+            <Grid item xs={12} sm={6}>
               <TextField
                 label="Bedrooms"
                 name="bedrooms"
@@ -150,8 +158,7 @@ const AddPropertyPage = () => {
                 onChange={handleChange}
               />
             </Grid>
-
-            <Grid item xs={12} sm={4}>
+            <Grid item xs={12} sm={6}>
               <TextField
                 label="Bathrooms"
                 name="bathrooms"
@@ -162,8 +169,7 @@ const AddPropertyPage = () => {
                 onChange={handleChange}
               />
             </Grid>
-
-            <Grid item xs={12} sm={4}>
+            <Grid item xs={12} sm={6}>
               <TextField
                 label="Area (sq ft)"
                 name="area"
@@ -174,178 +180,88 @@ const AddPropertyPage = () => {
                 onChange={handleChange}
               />
             </Grid>
-
-            {/* Address Section */}
-            <Grid item xs={12} sm={4}>
-              <TextField
-                label="City"
-                name="city"
-                fullWidth
-                required
-                value={propertyData.city}
-                onChange={handleChange}
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={4}>
-              <TextField
-                label="Street"
-                name="street"
-                fullWidth
-                required
-                value={propertyData.street}
-                onChange={handleChange}
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={4}>
-              <TextField
-                label="State"
-                name="state"
-                fullWidth
-                required
-                value={propertyData.state}
-                onChange={handleChange}
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={4}>
-              <TextField
-                label="ZIP Code"
-                name="zip"
-                fullWidth
-                required
-                value={propertyData.zip}
-                onChange={handleChange}
-              />
-            </Grid>
-
-            {/* Property Features (Checkboxes) */}
-            <Grid container spacing={2}>
-              {[
-                { label: "Garage", name: "garage" },
-                { label: "Swimming Pool", name: "swimmingPool" },
-                { label: "Fireplace", name: "fireplace" },
-                { label: "Basement", name: "basement" },
-                { label: "Attic", name: "attic" },
-                { label: "Air Conditioning", name: "airConditioning" },
-                { label: "Remodeled", name: "remodeled" },
-                { label: "Security System", name: "securitySystem" },
-                { label: "Smart Home", name: "smartHome" },
-                { label: "Fence", name: "fence" },
-                { label: "Pets Allowed", name: "petsAllowed" },
-                { label: "Walk-in Closets", name: "walkInClosets" },
-              ].map((feature) => (
-                <Grid item xs={12} sm={4} key={feature.name}>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={propertyData[feature.name]}
-                        onChange={handleCheckboxChange}
-                        name={feature.name}
-                      />
-                    }
-                    label={feature.label}
-                  />
-                </Grid>
-              ))}
-            </Grid>
-
-            {/* Parking Spaces */}
-            <Grid item xs={12} sm={6}>
-              <TextField
-                label="Parking Spaces"
-                name="parkingSpaces"
-                type="number"
-                fullWidth
-                value={propertyData.parkingSpaces}
-                onChange={handleChange}
-              />
-            </Grid>
-
-            {/* HOA Fees */}
-            <Grid item xs={12} sm={6}>
-              <TextField
-                label="HOA Fees ($)"
-                name="hoaFees"
-                type="number"
-                fullWidth
-                value={propertyData.hoaFees}
-                onChange={handleChange}
-              />
-            </Grid>
-
-            {/* Appliances Included (Multi-select) */}
-            <Grid item xs={12}>
-              <TextField
-                select
-                label="Appliances Included"
-                name="appliancesIncluded"
-                fullWidth
-                sx={{ minWidth: 200 }} // Ensures the box starts at a reasonable width
-                SelectProps={{
-                  multiple: true,
-                  value: propertyData.appliancesIncluded,
-                  onChange: handleArrayChange,
-                }}
-              >
-                {[
-                  "Refrigerator",
-                  "Dishwasher",
-                  "Washer/Dryer",
-                  "Microwave",
-                  "Oven",
-                  "Stove",
-                ].map((appliance) => (
-                  <MenuItem key={appliance} value={appliance}>
-                    {appliance}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </Grid>
-
-            {/* Outdoor Space */}
-            <Grid item xs={12}>
-              <TextField
-                label="Outdoor Space (e.g., Balcony, Yard)"
-                name="outdoorSpace"
-                fullWidth
-                value={propertyData.outdoorSpace}
-                onChange={handleChange}
-              />
-            </Grid>
-
-            {/* Image Upload */}
-            <Grid item xs={12}>
-              <Button variant="contained" component="label" fullWidth>
-                Upload Images
-                <input
-                  type="file"
-                  hidden
-                  multiple
-                  accept="image/*"
-                  onChange={handleImageUpload}
-                />
-              </Button>
-              {propertyData.images.length > 0 && (
-                <Typography variant="body2" sx={{ mt: 1 }}>
-                  {propertyData.images.length} image(s) selected
-                </Typography>
-              )}
-            </Grid>
-
-            {/* Submit Button */}
-            <Grid item xs={12}>
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                fullWidth
-              >
-                Submit Property
-              </Button>
-            </Grid>
           </Grid>
+
+          {/* Image upload */}
+          <Typography variant="h6" sx={{ marginTop: 2 }}>
+            Upload property Images
+          </Typography>
+          <Grid item xs={12}>
+            <Button variant="contained" component="label" fullWidth>
+              Upload Images
+              <input
+                type="file"
+                hidden
+                multiple
+                accept="image/*"
+                onChange={handleImageUpload}
+              />
+            </Button>
+            {propertyData.images.length > 0 && (
+              <Typography variant="body2" sx={{ mt: 1 }}>
+                {propertyData.images.length} image(s) selected
+              </Typography>
+            )}
+            <Button
+              onClick={handleSubmitImages}
+              variant="contained"
+              color="secondary"
+              fullWidth
+              sx={{ marginTop: 2 }}
+            >
+              Submit Images
+            </Button>
+          </Grid>
+
+          <Typography variant="h6" sx={{ marginTop: 2 }}>
+            Features
+          </Typography>
+          <Grid container spacing={2} justifyContent="center">
+            {[
+              "garage",
+              "swimmingPool",
+              "fireplace",
+              "basement",
+              "attic",
+              "airConditioning",
+              "remodeled",
+              "securitySystem",
+              "smartHome",
+              "fence",
+              "petsAllowed",
+              "walkInClosets",
+            ].map((feature) => (
+              <Grid
+                item
+                xs={6}
+                sm={4}
+                md={3}
+                key={feature}
+                sx={{ textAlign: "center" }}
+              >
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={propertyData[feature]}
+                      onChange={handleCheckboxChange}
+                      name={feature}
+                    />
+                  }
+                  label={feature.replace(/([A-Z])/g, " $1").trim()}
+                />
+              </Grid>
+            ))}
+          </Grid>
+
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth
+            sx={{ marginTop: 2 }}
+          >
+            Submit Property
+          </Button>
         </form>
       </Paper>
     </Container>
