@@ -4,6 +4,7 @@ import DashboardPage from "./pages/dashboardPage";
 import PropertyDetailPage from "./pages/propertyDetailPage";
 import PropertiesPage from "./pages/propertiesPage";
 import EditPropertyPage from "./pages/editPropertyPage";
+import AddPropertyImagePage from "./pages/addPropertyImagePage";
 import "leaflet/dist/leaflet.css";
 
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
@@ -23,6 +24,11 @@ function App() {
           <Route
             path="/edit/properties/:propertyId"
             element={<EditPropertyPage />}
+          />
+          {/* step 2 page (adding images to a property) */}
+          <Route
+            path="/step2/properties/:propertyId"
+            element={<AddPropertyImagePage />}
           />
           <Route
             path="/properties/allProperties"
