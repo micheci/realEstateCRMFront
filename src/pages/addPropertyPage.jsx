@@ -42,7 +42,6 @@ const AddPropertyPage = () => {
     hoaFees: "",
     outdoorSpace: "",
   });
-  const [imagesState, setImagesState] = useState([]);
   const { createProperty } = usePropertyStore();
   const navigate = useNavigate();
   const handleChange = (e) => {
@@ -57,50 +56,15 @@ const AddPropertyPage = () => {
     e.preventDefault();
     const result = await createProperty(propertyData);
     if (result.success) {
-      navigate(`/properties/${result.data._id}`);
+      navigate(`/step2/properties/${result.data._id}`);
     }
-  };
-
-  const handleImageUpload = (e) => {
-    const files = Array.from(e.target.files);
-    console.log(files, "imagefiles");
-    setImagesState(files);
-  };
-
-  const handleSubmitImages = async () => {
-    const formData = new FormData();
-
-    // Append images to formData to send to the backend
-    imagesState.forEach((imageFile) => {
-      formData.append("images", imageFile);
-    });
-    for (let pair of formData.entries()) {
-      console.log(pair[0] + ": " + pair[1]); // Log the key-value pairs
-      console.log(pair[0] + ": " + pair[1].name); // Log the file name
-    }
-    // try {
-    //   const response = await fetch("YOUR_BACKEND_URL/upload", {
-    //     method: "POST",
-    //     body: formData,
-    //   });
-    //   const data = await response.json();
-
-    //   if (data.success) {
-    //     console.log("Images uploaded successfully!");
-    //     // You can update the propertyData with the uploaded image URLs if necessary
-    //   } else {
-    //     console.error("Error uploading images:", data.message);
-    //   }
-    // } catch (error) {
-    //   console.error("Upload failed", error);
-    // }
   };
 
   return (
     <Container sx={{ paddingY: 4, display: "flex", justifyContent: "center" }}>
       <Paper elevation={4} sx={{ padding: 4, width: "100%", maxWidth: 600 }}>
         <Typography variant="h4" gutterBottom>
-          Add New Property
+          Step 1 : Add Property Details
         </Typography>
         <form onSubmit={handleSubmit}>
           <Grid container spacing={2}>
@@ -180,37 +144,6 @@ const AddPropertyPage = () => {
                 onChange={handleChange}
               />
             </Grid>
-          </Grid>
-
-          {/* Image upload */}
-          <Typography variant="h6" sx={{ marginTop: 2 }}>
-            Upload property Images
-          </Typography>
-          <Grid item xs={12}>
-            <Button variant="contained" component="label" fullWidth>
-              Upload Images
-              <input
-                type="file"
-                hidden
-                multiple
-                accept="image/*"
-                onChange={handleImageUpload}
-              />
-            </Button>
-            {propertyData.images.length > 0 && (
-              <Typography variant="body2" sx={{ mt: 1 }}>
-                {propertyData.images.length} image(s) selected
-              </Typography>
-            )}
-            <Button
-              onClick={handleSubmitImages}
-              variant="contained"
-              color="secondary"
-              fullWidth
-              sx={{ marginTop: 2 }}
-            >
-              Submit Images
-            </Button>
           </Grid>
 
           <Typography variant="h6" sx={{ marginTop: 2 }}>

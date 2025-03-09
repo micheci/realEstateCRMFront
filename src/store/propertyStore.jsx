@@ -114,7 +114,7 @@ const usePropertyStore = () => {
     }
   };
 
-  //fiunction to edit images/add to images
+  //fiunction to edit images/add to properties
   const editPropertyImages = async (formData, propertyID) => {
     setLoading(true);
     try {
@@ -124,6 +124,7 @@ const usePropertyStore = () => {
       //setProperty(hardcodedProperty); // Store the single property
 
       setLoading(false);
+      return data;
     } catch (err) {
       setError(err.message);
       setLoading(false);

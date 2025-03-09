@@ -13,6 +13,7 @@ export const getProfileData = async () => {
         Authorization: `Bearer ${token}`, // Include the token as a Bearer token
       },
     });
+    console.log(response.data, "inservice");
     return response.data; // Return the profile data
   } catch (error) {
     console.error("Error fetching profile data:", error);
