@@ -3,40 +3,10 @@ import UploadImagesComponent from "../components/uploadImagesComponent";
 import usePropertyStore from "../store/propertyStore";
 import { useParams } from "react-router-dom";
 
-// interface Property {
-//   _id: string;
-//   price: string;
-//   address: string;
-//   bedrooms: number;
-//   bathrooms: number;
-//   sqft: string;
-//   description: string;
-//   images: string[];
-//   agentId: string;
-
-//   garage: boolean;
-//   parkingSpaces: number;
-//   swimmingPool: boolean;
-//   fireplace: boolean;
-//   basement: boolean;
-//   finishedBasement: boolean;
-//   attic: boolean;
-//   airConditioning: boolean;
-//   remodeled: boolean;
-//   securitySystem: boolean;
-//   smartHome: boolean;
-//   fence: boolean;
-//   hoaFees: number;
-//   petsAllowed: boolean;
-//   walkInClosets: boolean;
-// }
-
 const EditPropertyPage = () => {
-  // will need to make call to api to get all the information from the backend for property
   const { editPropertyById, getPropertyById, property } = usePropertyStore();
   const [editedProperty, setEditedProperty] = useState<any>(property);
-  const [images, setImages] = useState(editedProperty.images);
-  console.log(editedProperty, "THESTATESHOULDBEREAL");
+  const [images, setImages] = useState(editedProperty.images || []);
   const { propertyId } = useParams();
 
   useEffect(() => {
@@ -45,13 +15,19 @@ const EditPropertyPage = () => {
     }
   }, [propertyId]);
 
-  // Update editedProperty when property data is fetched
   useEffect(() => {
     if (property) {
       setEditedProperty(property);
-      //setImages(property.images || []); // Ensure images is an array
+      setImages(property.images || []);
     }
   }, [property]);
+
+  useEffect(() => {
+    setEditedProperty((prev) => ({
+      ...prev,
+      images: images,
+    }));
+  }, [images]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -69,7 +45,7 @@ const EditPropertyPage = () => {
   return (
     <div className="w-full bg-white p-6 shadow-md rounded-lg">
       <h2 className="text-2xl font-semibold mb-3">Edit Property</h2>
-      {/* <UploadImagesComponent images={images} setImages={setImages} />{" "} */}
+
       <label className="block mb-2">Address:</label>
       <input
         type="text"
@@ -78,6 +54,7 @@ const EditPropertyPage = () => {
         onChange={handleChange}
         className="w-full p-2 border rounded"
       />
+
       <label className="block mt-4">Price:</label>
       <input
         type="text"
@@ -86,6 +63,7 @@ const EditPropertyPage = () => {
         onChange={handleChange}
         className="w-full p-2 border rounded"
       />
+
       <label className="block mt-4">Bedrooms:</label>
       <input
         type="number"
@@ -94,6 +72,7 @@ const EditPropertyPage = () => {
         onChange={handleChange}
         className="w-full p-2 border rounded"
       />
+
       <label className="block mt-4">Bathrooms:</label>
       <input
         type="number"
@@ -102,6 +81,7 @@ const EditPropertyPage = () => {
         onChange={handleChange}
         className="w-full p-2 border rounded"
       />
+
       <label className="block mt-4">Size (sqft):</label>
       <input
         type="text"
@@ -110,6 +90,7 @@ const EditPropertyPage = () => {
         onChange={handleChange}
         className="w-full p-2 border rounded"
       />
+
       <label className="block mt-4">Description:</label>
       <textarea
         name="description"
@@ -117,9 +98,9 @@ const EditPropertyPage = () => {
         onChange={handleChange}
         className="w-full p-2 border rounded"
       ></textarea>
-      {/* Boolean fields */}
-      {/* <div className="mt-6">
-        <h3 className="text-lg font-semibold">Property Features</h3>
+
+      {/* Horizontal checkboxes below */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-4 mt-4">
         {[
           "garage",
           "swimmingPool",
@@ -134,22 +115,56 @@ const EditPropertyPage = () => {
           "fence",
           "petsAllowed",
           "walkInClosets",
-        ].map((feature) => (
-          <label key={feature} className="block mt-2">
+        ].map((field) => (
+          <div className="flex items-center gap-2" key={field}>
             <input
               type="checkbox"
-              name={feature}
-              checked={editedProperty[feature as keyof Property] as boolean}
+              name={field}
+              checked={editedProperty[field] || false}
               onChange={handleChange}
-              className="mr-2"
+              id={field}
             />
-            {feature
-              .replace(/([A-Z])/g, " $1")
-              .replace(/^./, (str) => str.toUpperCase())}
-          </label>
+            <label htmlFor={field} className="capitalize">
+              {field.replace(/([A-Z])/g, " $1")}
+            </label>
+          </div>
         ))}
-      </div> */}
-      {/* Center the button */}
+      </div>
+
+      <label className="block mt-4">Parking Spaces:</label>
+      <input
+        type="number"
+        name="parkingSpaces"
+        value={editedProperty.parkingSpaces || ""}
+        onChange={handleChange}
+        className="w-full p-2 border rounded"
+      />
+
+      <label className="block mt-4">Outdoor Space:</label>
+      <input
+        type="text"
+        name="outdoorSpace"
+        value={editedProperty.outdoorSpace || ""}
+        onChange={handleChange}
+        className="w-full p-2 border rounded"
+      />
+
+      <label className="block mt-4">HOA Fees:</label>
+      <input
+        type="number"
+        name="hoaFees"
+        value={editedProperty.hoaFees || ""}
+        onChange={handleChange}
+        className="w-full p-2 border rounded"
+      />
+
+      {/* Upload Images */}
+      <div className="mt-6">
+        <h3 className="text-lg font-semibold mb-2">Images:</h3>
+        <UploadImagesComponent images={images} setImages={setImages} />
+      </div>
+
+      {/* Submit */}
       <div className="flex justify-center mt-6">
         <button
           onClick={handleFormUpdate}

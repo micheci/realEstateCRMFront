@@ -1,7 +1,6 @@
 import { useState } from "react";
 import PropertiesHome from "./propertyHome";
 import ProfilePage from "./profilePage";
-import WebSiteThemePage from "./webSiteThemePage";
 import LogoutButton from "../components/logoutButtonComponent"; // Import your logout button
 
 function Dashboard() {
@@ -11,8 +10,6 @@ function Dashboard() {
     switch (activeMenu) {
       case "Profile":
         return <ProfilePage />;
-      case "Website Themes/Options":
-        return <WebSiteThemePage />;
       case "Properties":
         return <PropertiesHome />;
       default:
@@ -24,7 +21,7 @@ function Dashboard() {
     <div className="flex flex-col md:flex-row h-screen">
       {/* Sidebar */}
       <div className="md:w-64 bg-gray-800 text-white fixed md:top-0 md:left-0 md:h-screen w-full bottom-0 flex md:flex-col flex-row justify-around items-center p-2">
-        {["Profile", "Website Themes/Options", "Properties"].map((menu) => (
+        {["Profile", "Properties"].map((menu) => (
           <button
             key={menu}
             onClick={() => setActiveMenu(menu)}
