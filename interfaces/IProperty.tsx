@@ -1,0 +1,32 @@
+export interface Property {
+  _id: string;
+  agentId: string;
+  title: string;
+  address: string;
+  price: number;
+  bedrooms: number;
+  bathrooms: number;
+  description: string;
+  images: string[];
+  featured: boolean;
+  isFeatured: boolean;
+  airConditioning: boolean;
+  attic: boolean;
+  basement: boolean;
+  finishedBasement: boolean;
+  fireplace: boolean;
+  garage: boolean;
+  fence: boolean;
+  remodeled: boolean;
+  securitySystem: boolean;
+  smartHome: boolean;
+  swimmingPool: boolean;
+  walkInClosets: boolean;
+  petsAllowed: boolean;
+  outdoorSpace: string;
+  parkingSpaces: number | null;
+  hoaFees: number | null;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
