@@ -6,11 +6,13 @@ import {
   createPropertyService,
   editPropertyImagesService,
 } from "../service/propertyService";
+import { Property } from "../../interfaces/IProperty";
 
 // Custom hook for managing property state and fetching data
 const usePropertyStore = () => {
   const [properties, setProperties] = useState([]); // State to store all properties
-  const [property, setProperty] = useState < property > {}; // State to store a single property
+  // eslint-disable-next-line no-undef
+  const [property, setProperty] = useState<Partial<Property>>({});
   const [loading, setLoading] = useState(false); // Loading state
   const [error, setError] = useState(null); // Error state
 

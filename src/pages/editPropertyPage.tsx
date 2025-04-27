@@ -5,10 +5,10 @@ import { useParams } from "react-router-dom";
 
 const EditPropertyPage = () => {
   const { editPropertyById, getPropertyById, property } = usePropertyStore();
-  const [editedProperty, setEditedProperty] = useState<any>(null);
-  const [images, setImages] = useState<any>([]);
+  const [editedProperty, setEditedProperty] = useState<any>(property);
+  const [images, setImages] = useState<any>(editedProperty.images || []);
   const { propertyId } = useParams();
-  console.log(property, "edit page");
+  console.log(property, "should give me info for edit property");
   useEffect(() => {
     if (propertyId) {
       getPropertyById(propertyId);
@@ -23,12 +23,10 @@ const EditPropertyPage = () => {
   }, [property]);
 
   useEffect(() => {
-    if (editedProperty) {
-      setEditedProperty((prev) => ({
-        ...prev,
-        images: images,
-      }));
-    }
+    setEditedProperty((prev) => ({
+      ...prev,
+      images: images,
+    }));
   }, [images]);
 
   const handleChange = (e) => {
@@ -40,14 +38,9 @@ const EditPropertyPage = () => {
   };
 
   const handleFormUpdate = () => {
-    if (!editedProperty) return;
     console.log("Updated Property Data:", editedProperty);
     editPropertyById(editedProperty, editedProperty.id);
   };
-
-  if (!editedProperty) {
-    return <div className="p-6">Loading property data...</div>;
-  }
 
   return (
     <div className="w-full bg-white p-6 shadow-md rounded-lg">

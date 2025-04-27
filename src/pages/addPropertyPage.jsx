@@ -8,6 +8,7 @@ import {
   FormControlLabel,
   Checkbox,
   Grid,
+  FormHelperText,
 } from "@mui/material";
 import usePropertyStore from "../store/propertyStore";
 import { useNavigate } from "react-router-dom";
@@ -20,32 +21,36 @@ const AddPropertyPage = () => {
     price: "",
     bedrooms: "",
     bathrooms: "",
-    area: "",
+    sqft: "",
     images: [],
-    city: "",
-    street: "",
-    state: "",
-    zip: "",
     garage: false,
     parkingSpaces: "",
     swimmingPool: false,
     fireplace: false,
     basement: false,
+    finishedBasement: false,
     attic: false,
     airConditioning: false,
     remodeled: false,
+    outdoorSpace: false, // <-- now a boolean
     securitySystem: false,
     smartHome: false,
     fence: false,
+    hoaFees: "",
     petsAllowed: false,
     walkInClosets: false,
-    hoaFees: "",
-    outdoorSpace: "",
+    isFeatured: false,
   });
+
   const { createProperty } = usePropertyStore();
   const navigate = useNavigate();
+
   const handleChange = (e) => {
-    setPropertyData({ ...propertyData, [e.target.name]: e.target.value });
+    const { name, value, type } = e.target;
+    setPropertyData({
+      ...propertyData,
+      [name]: type === "number" ? Number(value) : value,
+    });
   };
 
   const handleCheckboxChange = (e) => {
@@ -109,6 +114,7 @@ const AddPropertyPage = () => {
                 required
                 value={propertyData.price}
                 onChange={handleChange}
+                inputProps={{ min: 0 }}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -120,6 +126,7 @@ const AddPropertyPage = () => {
                 required
                 value={propertyData.bedrooms}
                 onChange={handleChange}
+                inputProps={{ min: 0 }}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -131,17 +138,19 @@ const AddPropertyPage = () => {
                 required
                 value={propertyData.bathrooms}
                 onChange={handleChange}
+                inputProps={{ min: 0 }}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
-                label="Area (sq ft)"
-                name="area"
+                label="Square Footage (sq ft)"
+                name="sqft"
                 type="number"
                 fullWidth
                 required
-                value={propertyData.area}
+                value={propertyData.sqft}
                 onChange={handleChange}
+                inputProps={{ min: 0 }}
               />
             </Grid>
           </Grid>
@@ -155,6 +164,7 @@ const AddPropertyPage = () => {
               "swimmingPool",
               "fireplace",
               "basement",
+              "finishedBasement",
               "attic",
               "airConditioning",
               "remodeled",
@@ -186,12 +196,84 @@ const AddPropertyPage = () => {
             ))}
           </Grid>
 
+          <Typography variant="h6" sx={{ marginTop: 2 }}>
+            Parking and Outdoor
+          </Typography>
+
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Parking Spaces"
+                name="parkingSpaces"
+                type="number"
+                fullWidth
+                value={propertyData.parkingSpaces}
+                onChange={handleChange}
+                inputProps={{ min: 0 }}
+              />
+            </Grid>
+
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              sx={{ textAlign: "center", marginTop: 1 }}
+            >
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={propertyData.outdoorSpace}
+                    onChange={handleCheckboxChange}
+                    name="outdoorSpace"
+                  />
+                }
+                label="Outdoor Space"
+              />
+            </Grid>
+
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="HOA Fees ($)"
+                name="hoaFees"
+                type="number"
+                fullWidth
+                value={propertyData.hoaFees}
+                onChange={handleChange}
+                inputProps={{ min: 0 }}
+              />
+            </Grid>
+          </Grid>
+
+          <Typography variant="h6" sx={{ marginTop: 3 }}>
+            Special Options
+          </Typography>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={propertyData.isFeatured}
+                    onChange={handleCheckboxChange}
+                    name="isFeatured"
+                  />
+                }
+                label="Feature this property on the homepage"
+              />
+              {propertyData.isFeatured && (
+                <FormHelperText>
+                  This property will be shown on the home page and will likely
+                  be one of the users first views.
+                </FormHelperText>
+              )}
+            </Grid>
+          </Grid>
+
           <Button
             type="submit"
             variant="contained"
             color="primary"
             fullWidth
-            sx={{ marginTop: 2 }}
+            sx={{ marginTop: 3 }}
           >
             Submit Property
           </Button>
