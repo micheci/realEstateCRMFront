@@ -2,13 +2,15 @@ import React, { useEffect, useState } from "react";
 import UploadImagesComponent from "../components/uploadImagesComponent";
 import usePropertyStore from "../store/propertyStore";
 import { useParams } from "react-router-dom";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const EditPropertyPage = () => {
   const { editPropertyById, getPropertyById, property } = usePropertyStore();
   const [editedProperty, setEditedProperty] = useState<any>(property);
   const [images, setImages] = useState<any>(editedProperty.images || []);
   const { propertyId } = useParams();
-  console.log(property, "should give me info for edit property");
+  const navigate = useNavigate();
   useEffect(() => {
     if (propertyId) {
       getPropertyById(propertyId);
@@ -37,15 +39,35 @@ const EditPropertyPage = () => {
     }));
   };
 
-  const handleFormUpdate = () => {
-    console.log("Updated Property Data:", editedProperty);
-    editPropertyById(editedProperty, editedProperty.id);
+  const handleFormUpdate = async () => {
+    try {
+      await editPropertyById(editedProperty, editedProperty._id);
+      toast.success("Changes saved successfully!");
+    } catch (err) {
+      toast.error("Failed to save changes.");
+      console.error(err);
+    }
   };
 
   return (
     <div className="w-full bg-white p-6 shadow-md rounded-lg">
-      <h2 className="text-2xl font-semibold mb-3">Edit Property</h2>
-
+      <div className="flex justify-between items-center mb-3">
+        <h2 className="text-2xl font-semibold">Edit Property</h2>
+        <button
+          onClick={() => navigate("/dashboard")}
+          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+        >
+          ← Back to Dashboard
+        </button>
+      </div>
+      <label className="block mb-2">Title:</label>
+      <input
+        type="text"
+        name="title"
+        value={editedProperty.title}
+        onChange={handleChange}
+        className="w-full p-2 border rounded"
+      />
       <label className="block mb-2">Address:</label>
       <input
         type="text"
@@ -55,6 +77,17 @@ const EditPropertyPage = () => {
         className="w-full p-2 border rounded"
       />
 
+      <div className="flex items-center gap-2 mt-2">
+        <input
+          type="checkbox"
+          name="isFeatured"
+          checked={editedProperty.isFeatured || false}
+          onChange={handleChange}
+          id="isFeatured"
+        />
+        <label htmlFor="isFeatured">Featured Listing</label>
+        <h1>*This will be shown on the home page(can only have up to 6)</h1>
+      </div>
       <label className="block mt-4">Price:</label>
       <input
         type="text"
@@ -115,6 +148,7 @@ const EditPropertyPage = () => {
           "fence",
           "petsAllowed",
           "walkInClosets",
+          "outdoorSpace",
         ].map((field) => (
           <div className="flex items-center gap-2" key={field}>
             <input
@@ -136,15 +170,6 @@ const EditPropertyPage = () => {
         type="number"
         name="parkingSpaces"
         value={editedProperty.parkingSpaces || ""}
-        onChange={handleChange}
-        className="w-full p-2 border rounded"
-      />
-
-      <label className="block mt-4">Outdoor Space:</label>
-      <input
-        type="text"
-        name="outdoorSpace"
-        value={editedProperty.outdoorSpace || ""}
         onChange={handleChange}
         className="w-full p-2 border rounded"
       />

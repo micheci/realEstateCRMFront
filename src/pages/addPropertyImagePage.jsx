@@ -11,21 +11,27 @@ const AddPropertyImagePage = () => {
 
   const [imagesState, setImagesState] = useState([]); // Store uploaded images
   const [imagePreviews, setImagePreviews] = useState([]); // Store image previews
+  const [error, setError] = useState(""); // Error message
 
   const handleImageUpload = (e) => {
-    const files = Array.from(e.target.files); // Get the selected files
-    setImagesState((prevImages) => [...prevImages, ...files]); // Append new files to existing images
-    // Generate previews of the new images
+    const files = Array.from(e.target.files);
+    setImagesState((prevImages) => [...prevImages, ...files]);
     const previews = files.map((file) => URL.createObjectURL(file));
-    setImagePreviews((prevPreviews) => [...prevPreviews, ...previews]); // Append new previews to existing ones
+    setImagePreviews((prevPreviews) => [...prevPreviews, ...previews]);
   };
 
   const handleSubmitImages = async () => {
+    if (imagesState.length < 8) {
+      setError("Please upload at least 8 images before submitting.");
+      return;
+    }
+
+    setError(""); // Clear any existing error
     const formData = new FormData();
-    // Append images to formData to send to the backend
     imagesState.forEach((imageFile) => {
       formData.append("images", imageFile);
     });
+
     try {
       const result = await editPropertyImages(formData, propertyId);
       console.log(result, "inimagesfront");
@@ -61,17 +67,15 @@ const AddPropertyImagePage = () => {
           textAlign: "center",
         }}
       >
-        {/* Part 2 of 2 Header */}
         <Typography variant="h6" sx={{ marginBottom: 2, fontWeight: "bold" }}>
           Part 2 of 2
         </Typography>
 
-        {/* Encouraging message */}
         <Typography variant="h6" sx={{ marginBottom: 2 }}>
-          Add a few photos to show off your property! The more, the better! :)
+          Add a few photos to show off your property! The more, the better!
+          :)(Need atleast 8)
         </Typography>
 
-        {/* Image upload section */}
         <Typography variant="h6" sx={{ marginBottom: 2 }}>
           Upload property images
         </Typography>
@@ -92,7 +96,6 @@ const AddPropertyImagePage = () => {
           />
         </Button>
 
-        {/* Display image previews */}
         {imagePreviews.length > 0 && (
           <Box
             sx={{
@@ -123,13 +126,20 @@ const AddPropertyImagePage = () => {
           </Box>
         )}
 
-        {/* Submit button */}
+        {/* Show error message if not enough images */}
+        {error && (
+          <Typography color="error" sx={{ mt: 2 }}>
+            {error}
+          </Typography>
+        )}
+
         <Button
           onClick={handleSubmitImages}
           variant="contained"
           color="secondary"
           fullWidth
           sx={{ marginTop: 2 }}
+          disabled={imagesState.length < 8} // Optional: disable until valid
         >
           Submit Images
         </Button>

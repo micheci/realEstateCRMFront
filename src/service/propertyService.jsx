@@ -52,7 +52,7 @@ export const editPropertyByIdService = async (formdata, propertyID) => {
 
     // Make the PATCH request with the form data and headers
     const response = await axios.patch(
-      `${API_URL}/67989c5ce2d22574df770635`, // URL with property ID
+      `${API_URL}/${propertyID}`, // URL with property ID
       formdata, // Send form data in the request body
       {
         headers: {

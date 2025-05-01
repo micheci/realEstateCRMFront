@@ -14,7 +14,7 @@ const ProfilePage: React.FC = () => {
     instagram: "",
     linkedin: "",
   });
-
+  console.log(profile, "AYUDAA");
   useEffect(() => {
     fetchProfile();
   }, []);

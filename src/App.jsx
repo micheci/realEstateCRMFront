@@ -6,13 +6,14 @@ import PropertiesPage from "./pages/propertiesPage";
 import EditPropertyPage from "./pages/editPropertyPage";
 import AddPropertyImagePage from "./pages/addPropertyImagePage";
 import "leaflet/dist/leaflet.css";
-
+import { Toaster } from "react-hot-toast";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import ProtectedRouteComponent from "./components/protectedRouteComponent";
 
 function App() {
   return (
     <Router>
+      <Toaster position="top-right" /> {/* 👈 Add this line */}
       <Routes>
         <Route path="/" element={<LoginPage />} />
         <Route element={<ProtectedRouteComponent />}>

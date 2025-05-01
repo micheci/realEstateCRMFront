@@ -57,6 +57,7 @@ const useProfileStore = (): ProfileStore => {
     setLoading(true);
     try {
       const updatedProfile: Profile = await updateProfileData(newProfile);
+      console.log(updatedProfile, "inSTORE after profile udpate");
       setProfile(updatedProfile);
     } catch (err) {
       setError((err as Error).message);

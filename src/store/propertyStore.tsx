@@ -47,6 +47,7 @@ const usePropertyStore = () => {
   const editPropertyById = async (formData, propertyID) => {
     setLoading(true);
     try {
+      console.log("tryign to  updated", propertyID);
       await editPropertyByIdService(formData, propertyID);
       console.log("was updated");
       //setProperty(data.data); // Store the single property
