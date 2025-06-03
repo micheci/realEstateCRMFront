@@ -51,6 +51,7 @@ const ProfilePage: React.FC = () => {
     <div className="max-w-lg mx-auto p-6 bg-white shadow-lg rounded-lg mt-10">
       <h2 className="text-2xl font-semibold text-center mb-4">Edit Profile</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Image Section */}
         <div className="flex justify-center">
           <img
             src={profile.profilePicture}
@@ -58,7 +59,20 @@ const ProfilePage: React.FC = () => {
             className="w-24 h-24 rounded-full border border-gray-300"
           />
         </div>
-
+        <div className="flex flex-col items-center space-y-2">
+          <label
+            htmlFor="file-upload"
+            className="cursor-pointer bg-blue-600 text-white px-4 py-2 rounded-md shadow hover:bg-blue-700 transition"
+          >
+            Upload New Photo
+          </label>
+          <input
+            id="file-upload"
+            type="file"
+            accept="image/*"
+            className="hidden"
+          />
+        </div>
         <div className="grid grid-cols-1 gap-4">
           <div>
             <label className="block text-sm font-medium">Full Name</label>

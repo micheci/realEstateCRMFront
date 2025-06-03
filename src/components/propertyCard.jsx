@@ -6,47 +6,59 @@ const PropertyCard = ({ property }) => {
 
   return (
     <div
-      className="bg-white p-4 shadow rounded-lg flex flex-col items-center relative"
+      className="bg-white rounded-xl shadow-md overflow-hidden cursor-pointer hover:ring-2 hover:ring-blue-300 transition"
       onClick={() => navigate(`/edit/properties/${property._id}`)}
     >
-      {/* Header with Edit Button */}
-      <div className="w-full text-center relative">
-        <h3 className="font-bold text-lg">{property.title}</h3>
-        <button className="text-blue-500 hover:underline absolute top-0 right-4">
-          Edit
-        </button>
+      {/* Top Images Section */}
+      <div className="w-full h-48 overflow-hidden">
+        <img
+          src={property.images[0]}
+          alt="Main property"
+          className="w-full h-full object-cover"
+        />
       </div>
 
-      {/* Property Details */}
-      <div className="text-center mt-2">
-        <p>
-          <span className="font-medium">Price:</span> ${property.price}
-        </p>
-        <p>
-          <span className="font-medium">Description:</span>{" "}
-          {property.description}
-        </p>
-        <p>
-          <span className="font-medium">Address:</span> {property.address.city},{" "}
-          {property.address.state} {property.address.zip}
-        </p>
-      </div>
+      {/* Info Section */}
+      <div className="p-4">
+        <div className="flex justify-between items-start mb-2">
+          <h3 className="text-lg font-semibold">{property.title}</h3>
+          <button
+            className="text-blue-600 hover:underline text-sm"
+            onClick={(e) => {
+              e.stopPropagation();
+              navigate(`/edit/properties/${property._id}`);
+            }}
+          >
+            Edit
+          </button>
+        </div>
 
-      {/* Property Images at the Bottom */}
-      <div className="flex gap-2 mt-4">
-        {property.images.slice(0, 3).map((img, index) => (
-          <img
-            key={index}
-            src={img}
-            alt={`Property ${index + 1}`}
-            className="h-24 w-24 object-cover rounded-lg shadow-md"
-          />
-        ))}
+        <div className="text-gray-600 mb-1">
+          ${property.price.toLocaleString()}
+        </div>
+        <div className="text-sm text-gray-500">{property.description}</div>
 
-        {/* Show "..." if there are more than 3 images */}
-        {property.images.length > 3 && (
-          <div className="h-24 w-24 flex items-center justify-center bg-gray-200 rounded-lg shadow-md text-gray-600 text-xl font-bold">
-            ...
+        <div className="text-sm text-gray-500 mt-2">
+          📍 {property.address.city}, {property.address.state}{" "}
+          {property.address.zip}
+        </div>
+
+        {/* Optional: Preview of extra images below the info */}
+        {property.images.length > 1 && (
+          <div className="flex gap-2 mt-4">
+            {property.images.slice(1, 4).map((img, index) => (
+              <img
+                key={index}
+                src={img}
+                alt={`Thumbnail ${index + 1}`}
+                className="w-16 h-16 object-cover rounded-md"
+              />
+            ))}
+            {property.images.length > 4 && (
+              <div className="w-16 h-16 flex items-center justify-center bg-gray-100 text-gray-600 text-sm font-medium rounded-md">
+                +{property.images.length - 4}
+              </div>
+            )}
           </div>
         )}
       </div>

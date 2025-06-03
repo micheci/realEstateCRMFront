@@ -11,7 +11,7 @@ function Login() {
   // useEffect to navigate to dashboard when user is set
   useEffect(() => {
     if (user) {
-      navigate("/dashboard"); // Redirect to dashboard when user is logged in
+      navigate("/myproperties"); // Redirect to dashboard when user is logged in
     }
   }, [user, navigate]); // Run effect when `user` changes
   // Function to handle form submission
@@ -21,7 +21,7 @@ function Login() {
     // If login is successful, navigate to the dashboard
     console.log(user, "updateduser");
     if (!error && user) {
-      navigate("/dashboard"); // Navigate to the dashboard page
+      navigate("/myproperties"); // Navigate to the dashboard page
     }
   };
 
