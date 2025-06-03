@@ -17,6 +17,7 @@ export interface Property {
   fireplace: boolean;
   garage: boolean;
   fence: boolean;
+  sqft: number;
   remodeled: boolean;
   securitySystem: boolean;
   smartHome: boolean;

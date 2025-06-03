@@ -1,4 +1,5 @@
 import PropertyCard from "../components/propertyCard";
+import { useNavigate } from "react-router-dom";
 
 const properties = [
   {
@@ -50,29 +51,9 @@ const properties = [
   },
 ];
 
-// const PropertyCard = ({ property }) => (
-//   <div className="bg-white rounded-xl shadow-md overflow-hidden">
-//     <img
-//       src={property.image}
-//       alt="Property"
-//       className="w-full h-48 object-cover"
-//     />
-//     <div className="p-4">
-//       <div className="text-lg font-semibold">{property.address}</div>
-//       <div className="text-gray-600">{property.price}</div>
-//       <div className="text-sm text-gray-500 mt-1">
-//         🛏 {property.beds} · 🛁 {property.baths} · 📐 {property.sqft} sqft
-//       </div>
-//       <div className="flex justify-end space-x-2 mt-4">
-//         <button className="text-blue-600 hover:underline">Edit</button>
-//         <button className="text-red-600 hover:underline">Delete</button>
-//         <button className="text-gray-600 hover:underline">View</button>
-//       </div>
-//     </div>
-//   </div>
-// );
-
 export default function MyProperties() {
+  const navigate = useNavigate();
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Full-width Header */}
@@ -81,7 +62,10 @@ export default function MyProperties() {
           <h1 className="text-2xl font-bold">My Properties</h1>
 
           <div className="flex items-center space-x-4">
-            <button className="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700">
+            <button
+              onClick={() => navigate("/add-property")}
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700"
+            >
               + Add Property
             </button>
             {/* Profile Button */}

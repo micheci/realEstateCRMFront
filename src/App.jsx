@@ -10,6 +10,7 @@ import { Toaster } from "react-hot-toast";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import ProtectedRouteComponent from "./components/protectedRouteComponent";
 import MyProperties from "./pages/myProperties";
+import AddPropertyWizardForm from "./pages/addPropertyWizard";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/" element={<LoginPage />} />
         <Route element={<ProtectedRouteComponent />}>
           <Route path="/myproperties" element={<MyProperties />} />
+          <Route path="/add-property" element={<AddPropertyWizardForm />} />
           {/* <Route path="/dashboard" element={<DashboardPage />} /> */}
           <Route
             path="/properties/:propertyId"
