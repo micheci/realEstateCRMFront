@@ -77,7 +77,7 @@ export const createPropertyService = async (formdata) => {
   try {
     // Retrieve the auth token (e.g., from localStorage, sessionStorage, or state management)
     const token = localStorage.getItem("authToken"); // Replace with how you store your token
-
+    console.log("inservice");
     // Make the GET request with the token included in the Authorization header
     const response = await axios.post(API_URL, formdata, {
       headers: {

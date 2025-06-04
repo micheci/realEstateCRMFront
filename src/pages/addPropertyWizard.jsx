@@ -2,12 +2,36 @@
 import { useState } from "react";
 import StepBasics from "../components/addPropertySteps/stepBasics";
 import StepAmenities from "../components/addPropertySteps/stepAmenities";
-// import StepMedia from "../components/addPropertySteps/stepMedia";
-// import StepDescription from "../components/addPropertySteps/stepDescription";
-// import StepContact from "../components/addPropertySteps/stepContact";
-// import StepReview from "../components/addPropertySteps/stepReview";
+import StepMedia from "../components/addPropertySteps/stepMedia";
+import StepDescription from "../components/addPropertySteps/stepDescription";
+import StepReview from "../components/addPropertySteps/stepReview";
+import usePropertyStore from "../store/propertyStore";
 
 const AddPropertyWizardForm = () => {
+  const { createProperty } = usePropertyStore();
+
+  const handleSubmit = async () => {
+    const formData = new FormData();
+
+    for (const key in propertyData) {
+      if (key === "images") {
+        propertyData.images.forEach((file) => {
+          formData.append("images", file);
+        });
+      } else {
+        formData.append(key, propertyData[key]);
+      }
+    }
+
+    try {
+      await createProperty(formData);
+      // Optionally show success or redirect here
+    } catch (error) {
+      // handle error
+      console.log(error);
+    }
+  };
+
   const [step, setStep] = useState(0);
   const [propertyData, setPropertyData] = useState({
     title: "",
@@ -61,40 +85,30 @@ const AddPropertyWizardForm = () => {
         />
       ),
     },
-    // {
-    //   title: "Media",
-    //   component: (
-    //     <StepMedia
-    //       key="step-media"
-    //       data={propertyData}
-    //       setData={setPropertyData}
-    //     />
-    //   ),
-    // },
-    // {
-    //   title: "Description",
-    //   component: (
-    //     <StepDescription
-    //       key="step-description"
-    //       data={propertyData}
-    //       setData={setPropertyData}
-    //     />
-    //   ),
-    // },
-    // {
-    //   title: "Contact",
-    //   component: (
-    //     <StepContact
-    //       key="step-contact"
-    //       data={propertyData}
-    //       setData={setPropertyData}
-    //     />
-    //   ),
-    // },
-    // {
-    //   title: "Review",
-    //   component: <StepReview key="step-review" data={propertyData} />,
-    // },
+    {
+      title: "Media",
+      component: (
+        <StepMedia
+          key="step-media"
+          data={propertyData}
+          setData={setPropertyData}
+        />
+      ),
+    },
+    {
+      title: "Description",
+      component: (
+        <StepDescription
+          key="step-description"
+          data={propertyData}
+          setData={setPropertyData}
+        />
+      ),
+    },
+    {
+      title: "Review",
+      component: <StepReview key="step-review" data={propertyData} />,
+    },
   ];
 
   const next = () => setStep((s) => Math.min(s + 1, steps.length - 1));
@@ -139,7 +153,7 @@ const AddPropertyWizardForm = () => {
           </button>
         ) : (
           <button
-            onClick={() => console.log("Submit:", propertyData)}
+            onClick={handleSubmit}
             className="px-4 py-2 rounded bg-green-600 text-white hover:bg-green-700"
           >
             Submit

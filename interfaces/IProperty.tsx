@@ -7,7 +7,7 @@ export interface Property {
   bedrooms: number;
   bathrooms: number;
   description: string;
-  images: string[];
+  images: string[] | any;
   featured: boolean;
   isFeatured: boolean;
   airConditioning: boolean;

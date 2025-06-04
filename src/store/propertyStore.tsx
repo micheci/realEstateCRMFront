@@ -65,10 +65,6 @@ const usePropertyStore = () => {
     setLoading(true);
     try {
       const data = await createPropertyService(formData);
-      console.log(data, "was created");
-      //setProperty(data.data); // Store the single property
-      //setProperty(hardcodedProperty); // Store the single property
-
       setLoading(false);
       return data;
     } catch (err) {
