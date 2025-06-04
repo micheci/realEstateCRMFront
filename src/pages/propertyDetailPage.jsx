@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import PropertyImageComponent from "../components/propertyImageComponent";
 import PropertyInfoComponent from "../components/propertyInfoComponent";
 import AgentInfoComponent from "../components/agentInfoComponent";
 import usePropertyStore from "../store/propertyStore";
 import useProfileStore from "../store/profileStore";
+import PropertyImageComponent from "../components/propertyImageComponent";
 
 const PropertyDetailPage = () => {
   const { propertyId } = useParams();
