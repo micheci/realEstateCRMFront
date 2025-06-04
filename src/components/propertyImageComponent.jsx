@@ -12,10 +12,8 @@ const PropertyImageComponent = ({ images }) => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const imagesPerPage = isMobile ? 1 : 8; // Show 1 image on mobile, 8 images on larger screens
+  const imagesPerPage = 2; // Show 2 images at a time regardless of screen size
   const totalPages = Math.ceil(images.length / imagesPerPage);
-
-  // Get the images for the current page
   const currentImages = images.slice(
     page * imagesPerPage,
     (page + 1) * imagesPerPage
@@ -24,20 +22,26 @@ const PropertyImageComponent = ({ images }) => {
   return (
     <div className="flex flex-col items-center w-full">
       {/* Navigation Buttons */}
-      <button
-        onClick={() => setPage((prev) => Math.max(prev - 1, 0))}
-        disabled={page === 0}
-        className="px-6 py-2 bg-gray-300 rounded disabled:opacity-50 mb-2"
-      >
-        ← Prev
-      </button>
+      <div className="flex justify-between w-full max-w-screen-md px-4 mb-2">
+        <button
+          onClick={() => setPage((prev) => Math.max(prev - 1, 0))}
+          disabled={page === 0}
+          className="px-6 py-2 bg-gray-300 rounded disabled:opacity-50"
+        >
+          ← Prev
+        </button>
 
-      {/* Image Display */}
-      <div
-        className={`grid ${
-          isMobile ? "grid-cols-1" : "grid-cols-4 grid-rows-2"
-        } gap-2 w-full max-w-screen-xl mx-4`}
-      >
+        <button
+          onClick={() => setPage((prev) => Math.min(prev + 1, totalPages - 1))}
+          disabled={page === totalPages - 1}
+          className="px-6 py-2 bg-gray-300 rounded disabled:opacity-50"
+        >
+          Next →
+        </button>
+      </div>
+
+      {/* Image Display (2 images side by side) */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-screen-md px-4">
         {currentImages.map((img, index) => (
           <div key={index} className="w-full h-60">
             <img
@@ -48,19 +52,10 @@ const PropertyImageComponent = ({ images }) => {
           </div>
         ))}
       </div>
-
-      <button
-        onClick={() => setPage((prev) => Math.min(prev + 1, totalPages - 1))}
-        disabled={page === totalPages - 1}
-        className="px-6 py-2 bg-gray-300 rounded disabled:opacity-50 mt-2"
-      >
-        Next →
-      </button>
     </div>
   );
 };
 
-// PropTypes
 PropertyImageComponent.propTypes = {
   images: PropTypes.arrayOf(PropTypes.string).isRequired,
 };

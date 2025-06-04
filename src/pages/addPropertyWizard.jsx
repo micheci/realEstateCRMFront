@@ -1,4 +1,3 @@
-// AddPropertyWizardForm.jsx
 import { useState } from "react";
 import StepBasics from "../components/addPropertySteps/stepBasics";
 import StepAmenities from "../components/addPropertySteps/stepAmenities";
@@ -6,33 +5,14 @@ import StepMedia from "../components/addPropertySteps/stepMedia";
 import StepDescription from "../components/addPropertySteps/stepDescription";
 import StepReview from "../components/addPropertySteps/stepReview";
 import usePropertyStore from "../store/propertyStore";
+import { useNavigate } from "react-router-dom";
 
 const AddPropertyWizardForm = () => {
   const { createProperty } = usePropertyStore();
-
-  const handleSubmit = async () => {
-    const formData = new FormData();
-
-    for (const key in propertyData) {
-      if (key === "images") {
-        propertyData.images.forEach((file) => {
-          formData.append("images", file);
-        });
-      } else {
-        formData.append(key, propertyData[key]);
-      }
-    }
-
-    try {
-      await createProperty(formData);
-      // Optionally show success or redirect here
-    } catch (error) {
-      // handle error
-      console.log(error);
-    }
-  };
+  const navigate = useNavigate();
 
   const [step, setStep] = useState(0);
+  const [isStepValid, setIsStepValid] = useState(true); // for validation
   const [propertyData, setPropertyData] = useState({
     title: "",
     address: "",
@@ -64,6 +44,35 @@ const AddPropertyWizardForm = () => {
     agentEmail: "",
   });
 
+  const handleSubmit = async () => {
+    const formData = new FormData();
+
+    for (const key in propertyData) {
+      if (key === "images") {
+        propertyData.images.forEach((file) => {
+          formData.append("images", file);
+        });
+      } else {
+        formData.append(key, propertyData[key]);
+      }
+    }
+
+    try {
+      const response = await createProperty(formData);
+      console.log(response, "res in front end");
+
+      if (response.success) {
+        // Navigate to the newly created property's detail page using its _id
+        navigate(`/properties/${response.data._id}`);
+      } else {
+        // handle error or show message
+        console.error("Property creation failed", response);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const steps = [
     {
       title: "Basics",
@@ -92,6 +101,7 @@ const AddPropertyWizardForm = () => {
           key="step-media"
           data={propertyData}
           setData={setPropertyData}
+          setStepValid={setIsStepValid} // <-- only used here
         />
       ),
     },
@@ -144,10 +154,16 @@ const AddPropertyWizardForm = () => {
         >
           Back
         </button>
+
         {step < steps.length - 1 ? (
           <button
             onClick={next}
-            className="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700"
+            disabled={step === 2 && !isStepValid}
+            className={`px-4 py-2 rounded text-white ${
+              step === 2 && !isStepValid
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-blue-600 hover:bg-blue-700"
+            }`}
           >
             Next
           </button>

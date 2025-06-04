@@ -4,15 +4,24 @@ import { Property } from "../../../interfaces/IProperty";
 type StepMediaProps = {
   data: Partial<Property>;
   setData: (data: Partial<Property>) => void;
+  setStepValid: (valid: boolean) => void; // ✅ REQUIRED for validation
 };
 
-const StepMedia: React.FC<StepMediaProps> = ({ data, setData }) => {
+const StepMedia: React.FC<StepMediaProps> = ({
+  data,
+  setData,
+  setStepValid,
+}) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  // Local state for preview URLs (do not send these to backend)
   const [previewUrls, setPreviewUrls] = useState<string[]>([]);
 
-  // Generate preview URLs from files
+  // ✅ Validate image count when images change
+  useEffect(() => {
+    const imageCount = (data.images as File[])?.length || 0;
+    setStepValid(imageCount >= 6);
+  }, [data.images, setStepValid]);
+
+  // Generate preview URLs
   useEffect(() => {
     if (!data.images || data.images.length === 0) {
       setPreviewUrls([]);
@@ -24,7 +33,6 @@ const StepMedia: React.FC<StepMediaProps> = ({ data, setData }) => {
     );
     setPreviewUrls(urls);
 
-    // Revoke URLs on cleanup to avoid memory leaks
     return () => urls.forEach((url) => URL.revokeObjectURL(url));
   }, [data.images]);
 
@@ -32,7 +40,6 @@ const StepMedia: React.FC<StepMediaProps> = ({ data, setData }) => {
     const files = event.target.files;
     if (!files) return;
 
-    // Append new files to existing ones
     const newFiles = Array.from(files);
 
     setData({
@@ -64,6 +71,12 @@ const StepMedia: React.FC<StepMediaProps> = ({ data, setData }) => {
         onChange={handleImageUpload}
         className="hidden"
       />
+
+      {previewUrls.length < 6 && (
+        <p className="text-red-500 text-sm">
+          Please upload at least 6 images to continue.
+        </p>
+      )}
 
       <div className="grid grid-cols-3 gap-4 mt-4">
         {previewUrls.map((img, index) => (

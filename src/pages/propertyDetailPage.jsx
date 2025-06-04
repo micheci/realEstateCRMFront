@@ -10,10 +10,6 @@ const PropertyDetailPage = () => {
   const { propertyId } = useParams();
   const { getPropertyById, property } = usePropertyStore();
   const { fetchProfile, profile } = useProfileStore();
-
-  //const [property, setProperty] = useState(null);
-  console.log(propertyId, property, "indetailpage");
-  console.log(profile, "profileDETAIL");
   useEffect(() => {
     const fetchProperty = async () => {
       if (propertyId) {
