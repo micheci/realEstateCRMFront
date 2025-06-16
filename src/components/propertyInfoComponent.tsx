@@ -27,14 +27,39 @@ interface Property {
   petsAllowed: boolean;
   walkInClosets: boolean;
 }
-
 const PropertyInfoComponent = ({ property }: { property: Property }) => {
   const encodedAddress = encodeURIComponent(property.address);
+
+  const GOOGLE_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+  const renderFeatures = (
+    title: string,
+    features: { label: string; value: string | number }[]
+  ) => (
+    <div className="mt-8">
+      <h4 className="font-semibold text-gray-800 text-lg mb-4">{title}</h4>
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+        {features.map((feature, index) => (
+          <div
+            key={index}
+            className="border rounded-lg p-4 flex flex-col items-center justify-between shadow-sm bg-white"
+          >
+            <span className="text-sm text-gray-500 font-medium mb-2 text-center">
+              {feature.label}
+            </span>
+            <span className="text-lg font-semibold text-gray-800">
+              {feature.value}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 
   return (
     <div className="w-full lg:w-3/4 bg-white p-6 shadow-md rounded-lg">
       <h2 className="text-2xl font-semibold mb-3">{property.address}</h2>
       <p className="text-xl font-bold text-green-600">{property.price}</p>
+
       <div className="mt-3 text-gray-700">
         <p>
           <strong>Bedrooms:</strong> {property.bedrooms} |{" "}
@@ -42,6 +67,7 @@ const PropertyInfoComponent = ({ property }: { property: Property }) => {
           <strong>Size:</strong> {property.sqft}
         </p>
       </div>
+
       <p className="mt-4 text-gray-600">{property.description}</p>
 
       {/* Features Section */}
@@ -50,89 +76,59 @@ const PropertyInfoComponent = ({ property }: { property: Property }) => {
           Property Features
         </h3>
 
-        {/* Inside Features */}
-        <div className="mt-4">
-          <h4 className="font-semibold text-gray-800">Inside</h4>
-          <ul className="list-disc pl-5 text-gray-700">
-            <li>
-              <strong>Air Conditioning:</strong>{" "}
-              {property.airConditioning ? "Yes" : "No"}
-            </li>
-            <li>
-              <strong>Remodeled:</strong> {property.remodeled ? "Yes" : "No"}
-            </li>
-            <li>
-              <strong>Fireplace:</strong> {property.fireplace ? "Yes" : "No"}
-            </li>
-            <li>
-              <strong>Basement:</strong> {property.basement ? "Yes" : "No"}
-            </li>
-            <li>
-              <strong>Finished Basement:</strong>{" "}
-              {property.finishedBasement ? "Yes" : "No"}
-            </li>
-            <li>
-              <strong>Attic:</strong> {property.attic ? "Yes" : "No"}
-            </li>
-            <li>
-              <strong>Walk-In Closets:</strong>{" "}
-              {property.walkInClosets ? "Yes" : "No"}
-            </li>
-          </ul>
-        </div>
+        {renderFeatures("Inside Features", [
+          {
+            label: "Air Conditioning",
+            value: property.airConditioning ? "Yes" : "No",
+          },
+          { label: "Remodeled", value: property.remodeled ? "Yes" : "No" },
+          { label: "Fireplace", value: property.fireplace ? "Yes" : "No" },
+          { label: "Basement", value: property.basement ? "Yes" : "No" },
+          {
+            label: "Finished Basement",
+            value: property.finishedBasement ? "Yes" : "No",
+          },
+          { label: "Attic", value: property.attic ? "Yes" : "No" },
+          {
+            label: "Walk-In Closets",
+            value: property.walkInClosets ? "Yes" : "No",
+          },
+          {
+            label: "Sqft",
+            value: property.sqft?.toLocaleString() || "N/A",
+          },
+        ])}
 
-        {/* Outside Features */}
-        <div className="mt-4">
-          <h4 className="font-semibold text-gray-800">Outside</h4>
-          <ul className="list-disc pl-5 text-gray-700">
-            <li>
-              <strong>Garage:</strong> {property.garage ? "Yes" : "No"}
-            </li>
-            <li>
-              <strong>Swimming Pool:</strong>{" "}
-              {property.swimmingPool ? "Yes" : "No"}
-            </li>
-            <li>
-              <strong>Fence:</strong> {property.fence ? "Yes" : "No"}
-            </li>
-            <li>
-              <strong>Parking Spaces:</strong> {property.parkingSpaces}
-            </li>
-          </ul>
-        </div>
+        {renderFeatures("Outside Features", [
+          { label: "Garage", value: property.garage ? "Yes" : "No" },
+          {
+            label: "Swimming Pool",
+            value: property.swimmingPool ? "Yes" : "No",
+          },
+          { label: "Fence", value: property.fence ? "Yes" : "No" },
+          { label: "Parking Spaces", value: property.parkingSpaces },
+        ])}
 
-        {/* Neighborhood Features */}
-        <div className="mt-4">
-          <h4 className="font-semibold text-gray-800">Neighborhood</h4>
-          <ul className="list-disc pl-5 text-gray-700">
-            <li>
-              <strong>Pets Allowed:</strong>{" "}
-              {property.petsAllowed ? "Yes" : "No"}
-            </li>
-            <li>
-              <strong>HOA Fees:</strong> ${property.hoaFees}
-            </li>
-            <li>
-              <strong>Security System:</strong>{" "}
-              {property.securitySystem ? "Yes" : "No"}
-            </li>
-            <li>
-              <strong>Smart Home:</strong> {property.smartHome ? "Yes" : "No"}
-            </li>
-          </ul>
-        </div>
+        {renderFeatures("Neighborhood Features", [
+          { label: "Pets Allowed", value: property.petsAllowed ? "Yes" : "No" },
+          { label: "HOA Fees", value: `$${property.hoaFees}` },
+          {
+            label: "Security System",
+            value: property.securitySystem ? "Yes" : "No",
+          },
+          { label: "Smart Home", value: property.smartHome ? "Yes" : "No" },
+        ])}
       </div>
 
       {/* Map Section */}
       <div className="mt-6">
         <h3 className="text-lg font-semibold text-center mb-4">Location</h3>
-        {/* Hide the map on mobile and tablet screens */}
-        <div className="hidden lg:block">
+        <div className="hidden lg:flex justify-center">
           <iframe
             width="600"
             height="450"
             loading="lazy"
-            src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBejTSPgVWVGTKYGD4Kqq-inCFkcSfcGUs&q=${encodedAddress}`}
+            src={`https://www.google.com/maps/embed/v1/place?key=${GOOGLE_KEY}&q=${encodedAddress}`}
           ></iframe>
         </div>
       </div>

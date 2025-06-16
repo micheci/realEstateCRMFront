@@ -12,7 +12,7 @@ const PropertyImageComponent: React.FC<Props> = ({ images }) => {
 
   // convenience helpers
   const total = images.length;
-  const canNavigate = total > 5; // only show arrows if needed
+  const canNavigate = total >= 3; // only show arrows if needed
   const prev = () => setStart((start - 1 + total) % total);
   const next = () => setStart((start + 1) % total);
 
@@ -29,7 +29,7 @@ const PropertyImageComponent: React.FC<Props> = ({ images }) => {
       {canNavigate && (
         <button
           onClick={prev}
-          className="absolute -left-6 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/80 hover:bg-white shadow"
+          className="absolute left-2 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/80 hover:bg-white shadow"
         >
           <ChevronLeftIcon className="w-6 h-6" />
         </button>
@@ -61,7 +61,7 @@ const PropertyImageComponent: React.FC<Props> = ({ images }) => {
       {canNavigate && (
         <button
           onClick={next}
-          className="absolute -right-6 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/80 hover:bg-white shadow"
+          className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/80 hover:bg-white shadow"
         >
           <ChevronRightIcon className="w-6 h-6" />
         </button>

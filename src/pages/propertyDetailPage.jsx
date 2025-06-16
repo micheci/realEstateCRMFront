@@ -5,6 +5,7 @@ import AgentInfoComponent from "../components/agentInfoComponent";
 import usePropertyStore from "../store/propertyStore";
 import useProfileStore from "../store/profileStore";
 import PropertyImageComponent from "../components/propertyImageComponent";
+import Navbar from "../components/navbar";
 
 const PropertyDetailPage = () => {
   const { propertyId } = useParams();
@@ -24,16 +25,17 @@ const PropertyDetailPage = () => {
   if (!property || !profile) return <div>Loading...</div>;
 
   return (
-    <div className="max-w-screen-xl mx-auto p-4">
-      {/* Property Images */}
-      <PropertyImageComponent images={property.images} />
+    <>
+      <Navbar /> {/* ⬅️ Now it spans full width */}
+      <div className="max-w-screen-xl mx-auto p-4">
+        <PropertyImageComponent images={property.images} />
 
-      {/* Property Details & Agent Info */}
-      <div className="flex flex-col lg:flex-row gap-4 mt-6">
-        <PropertyInfoComponent property={property} />
-        <AgentInfoComponent agentData={profile} />
+        <div className="flex flex-col lg:flex-row gap-4 mt-6">
+          <PropertyInfoComponent property={property} />
+          <AgentInfoComponent agentData={profile} />
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
