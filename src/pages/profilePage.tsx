@@ -1,188 +1,103 @@
-import React, { useEffect, useState } from "react";
-import useProfileStore from "../store/profileStore"; // Ensure correct path
+import { useNavigate, useLocation } from "react-router-dom";
+import { useEffect, useState, useRef } from "react";
+import useProfileStore from "../store/profileStore";
 
-const ProfilePage: React.FC = () => {
-  const { profile, fetchProfile, updateProfile } = useProfileStore();
-  const [formData, setFormData] = useState({
-    fullName: "",
-    email: "",
-    phone: "",
-    agencyName: "",
-    website: "",
-    licenseNumber: "",
-    facebook: "",
-    instagram: "",
-    linkedin: "",
-  });
-  console.log(profile, "AYUDAA");
+const Navbar = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { fetchProfile, profile } = useProfileStore();
+
+  const [showDropdown, setShowDropdown] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const isHome = location.pathname === "/myproperties";
+
   useEffect(() => {
-    fetchProfile();
+    if (!profile) fetchProfile();
   }, []);
 
+  // Close dropdown on outside click
   useEffect(() => {
-    if (profile) {
-      setFormData({
-        fullName: profile.fullName || "",
-        email: profile.email || "",
-        phone: profile.phone || "",
-        agencyName: profile.agencyName || "",
-        website: profile.website || "",
-        licenseNumber: profile.licenseNumber || "",
-        facebook: profile.facebook || "",
-        instagram: profile.instagram || "",
-        linkedin: profile.linkedin || "",
-      });
-    }
-  }, [profile]);
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setShowDropdown(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleLogout = () => {
+    localStorage.removeItem("authToken");
+    navigate("/login");
   };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    await updateProfile(formData);
-  };
-
-  if (!profile)
-    return <p className="text-center text-gray-600">Loading profile...</p>;
 
   return (
-    <div className="max-w-lg mx-auto p-6 bg-white shadow-lg rounded-lg mt-10">
-      <h2 className="text-2xl font-semibold text-center mb-4">Edit Profile</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Image Section */}
-        <div className="flex justify-center">
-          <img
-            src={profile.profilePicture}
-            alt="Profile"
-            className="w-24 h-24 rounded-full border border-gray-300"
-          />
-        </div>
-        <div className="flex flex-col items-center space-y-2">
-          <label
-            htmlFor="file-upload"
-            className="cursor-pointer bg-blue-600 text-white px-4 py-2 rounded-md shadow hover:bg-blue-700 transition"
-          >
-            Upload New Photo
-          </label>
-          <input
-            id="file-upload"
-            type="file"
-            accept="image/*"
-            className="hidden"
-          />
-        </div>
-        <div className="grid grid-cols-1 gap-4">
-          <div>
-            <label className="block text-sm font-medium">Full Name</label>
-            <input
-              type="text"
-              name="fullName"
-              value={formData.fullName}
-              onChange={handleChange}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium">Email</label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium">Phone</label>
-            <input
-              type="tel"
-              name="phone"
-              value={formData.phone}
-              onChange={handleChange}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium">Agency</label>
-            <input
-              type="text"
-              name="agencyName"
-              value={formData.agencyName}
-              onChange={handleChange}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium">Website</label>
-            <input
-              type="url"
-              name="website"
-              value={formData.website}
-              onChange={handleChange}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium">License Number</label>
-            <input
-              type="text"
-              name="licenseNumber"
-              value={formData.licenseNumber}
-              onChange={handleChange}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium">Facebook</label>
-            <input
-              type="url"
-              name="facebook"
-              value={formData.facebook}
-              onChange={handleChange}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium">Instagram</label>
-            <input
-              type="url"
-              name="instagram"
-              value={formData.instagram}
-              onChange={handleChange}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium">LinkedIn</label>
-            <input
-              type="url"
-              name="linkedin"
-              value={formData.linkedin}
-              onChange={handleChange}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
-            />
-          </div>
-        </div>
-
-        <button
-          type="submit"
-          className="w-full bg-blue-600 text-white py-2 rounded-md shadow-md hover:bg-blue-700 transition"
+    <div className="w-full bg-white border-b border-gray-200 shadow-sm py-4 sticky top-0 z-50">
+      <div className="flex justify-between items-center max-w-7xl mx-auto px-6">
+        <h1
+          className="text-2xl font-bold cursor-pointer"
+          onClick={() => navigate("/myproperties")}
         >
-          Save Changes
-        </button>
-      </form>
+          My Properties
+        </h1>
+
+        <div className="flex items-center space-x-4 relative" ref={dropdownRef}>
+          {!isHome && (
+            <button
+              onClick={() => navigate("/myproperties")}
+              className="text-blue-600 border border-blue-600 px-4 py-2 rounded-lg hover:bg-blue-50"
+            >
+              Home
+            </button>
+          )}
+
+          <button
+            onClick={() => navigate("/add-property")}
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700"
+          >
+            + Add Property
+          </button>
+
+          {/* 👤 Profile Picture Button */}
+          <button
+            onClick={() => setShowDropdown((prev) => !prev)}
+            className="w-9 h-9 rounded-full bg-gray-200 flex items-center justify-center hover:ring-2 hover:ring-blue-400"
+          >
+            <img
+              src={profile?.profilePicture || "/images/profile.jpg"}
+              alt="Profile"
+              className="w-8 h-8 rounded-full object-cover"
+            />
+          </button>
+
+          {/* 🔽 Dropdown */}
+          {showDropdown && (
+            <div className="absolute top-14 right-0 w-40 bg-white shadow-md rounded-md py-2 border z-50">
+              <button
+                onClick={() => {
+                  setShowDropdown(false);
+                  navigate("/profile");
+                }}
+                className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+              >
+                Profile
+              </button>
+              <button
+                onClick={handleLogout}
+                className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-red-600"
+              >
+                Logout
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 };
 
-export default ProfilePage;
+export default Navbar;

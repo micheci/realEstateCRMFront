@@ -30,17 +30,10 @@ function App() {
             path="/edit/properties/:propertyId"
             element={<EditPropertyPage />}
           />
-          {/* step 2 page (adding images to a property)
-          <Route
-            path="/step2/properties/:propertyId"
-            element={<AddPropertyImagePage />}
-          /> */}
           <Route
             path="/properties/allProperties"
             element={<PropertiesPage />}
           />
-          {/* New Route */}
-          {/* Add other routes here */}
         </Route>
       </Routes>
     </Router>

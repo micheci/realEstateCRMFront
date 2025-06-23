@@ -27,6 +27,8 @@ export interface Property {
   outdoorSpace: string;
   parkingSpaces: number | null;
   hoaFees: number | null;
+  type: string;
+  status: string;
   createdAt: string;
   updatedAt: string;
   __v: number;

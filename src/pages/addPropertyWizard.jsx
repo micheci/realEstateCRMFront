@@ -126,6 +126,12 @@ const AddPropertyWizardForm = () => {
 
   return (
     <div className="max-w-3xl mx-auto p-6 bg-white shadow-lg rounded-xl mt-10">
+      <button
+        onClick={() => navigate("/myproperties")}
+        className="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300 disabled:opacity-50"
+      >
+        Home
+      </button>
       {/* Step Indicator */}
       <div className="flex justify-between mb-6">
         {steps.map((s, i) => (

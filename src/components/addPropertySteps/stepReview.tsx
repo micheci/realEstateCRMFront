@@ -53,6 +53,12 @@ const StepReview: React.FC<StepReviewProps> = ({ data }) => {
         <div>
           <strong>Square Footage:</strong> {data.sqft}
         </div>
+        <div>
+          <strong>Property Type:</strong> {data.type}
+        </div>
+        <div>
+          <strong>Status:</strong> {data.status}
+        </div>
       </div>
 
       <div className="space-y-2">

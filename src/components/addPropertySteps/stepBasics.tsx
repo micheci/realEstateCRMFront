@@ -16,6 +16,7 @@ const StepBasics: React.FC<StepBasicsProps> = ({ data, setData }) => {
         onChange={(e) => setData({ ...data, title: e.target.value })}
         className="w-full border rounded px-4 py-2"
       />
+
       <input
         type="text"
         placeholder="Address"
@@ -23,6 +24,7 @@ const StepBasics: React.FC<StepBasicsProps> = ({ data, setData }) => {
         onChange={(e) => setData({ ...data, address: e.target.value })}
         className="w-full border rounded px-4 py-2"
       />
+
       <input
         type="text"
         placeholder="Price"
@@ -32,6 +34,7 @@ const StepBasics: React.FC<StepBasicsProps> = ({ data, setData }) => {
         }
         className="w-full border rounded px-4 py-2"
       />
+
       <input
         type="number"
         placeholder="Bedrooms"
@@ -41,6 +44,7 @@ const StepBasics: React.FC<StepBasicsProps> = ({ data, setData }) => {
         }
         className="w-full border rounded px-4 py-2"
       />
+
       <input
         type="number"
         placeholder="Bathrooms"
@@ -50,6 +54,7 @@ const StepBasics: React.FC<StepBasicsProps> = ({ data, setData }) => {
         }
         className="w-full border rounded px-4 py-2"
       />
+
       <input
         type="number"
         placeholder="Square Footage"
@@ -59,6 +64,37 @@ const StepBasics: React.FC<StepBasicsProps> = ({ data, setData }) => {
         }
         className="w-full border rounded px-4 py-2"
       />
+
+      <select
+        value={data.type || ""}
+        onChange={(e) => setData({ ...data, type: e.target.value })}
+        className="w-full border rounded px-4 py-2"
+        required
+      >
+        <option value="" disabled hidden>
+          Select Property Type
+        </option>
+        <option value="House">House</option>
+        <option value="Apartment">Apartment</option>
+        <option value="Condo">Condo</option>
+        <option value="Townhouse">Townhouse</option>
+        <option value="Land">Land</option>
+        <option value="Other">Other</option>
+      </select>
+
+      <select
+        value={data.status || ""}
+        onChange={(e) => setData({ ...data, status: e.target.value })}
+        className="w-full border rounded px-4 py-2"
+        required
+      >
+        <option value="" disabled hidden>
+          Select Listing Status
+        </option>
+        <option value="Active">Active</option>
+        <option value="Sold">Sold</option>
+        <option value="Draft">Draft</option>
+      </select>
     </div>
   );
 };
