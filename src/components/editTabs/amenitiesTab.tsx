@@ -3,7 +3,7 @@ import { Property } from "../../../interfaces/IProperty";
 
 interface AmenitiesTabProps {
   editedProperty: Property;
-  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  setEditedProperty: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const fields = [
@@ -25,7 +25,7 @@ const fields = [
 
 const AmenitiesTab: React.FC<AmenitiesTabProps> = ({
   editedProperty,
-  handleChange,
+  setEditedProperty,
 }) => {
   return (
     <div className="space-y-6">
@@ -39,7 +39,7 @@ const AmenitiesTab: React.FC<AmenitiesTabProps> = ({
               type="checkbox"
               name={field}
               checked={Boolean(editedProperty[field])}
-              onChange={handleChange}
+              onChange={setEditedProperty}
               className="h-5 w-5 text-blue-600 rounded focus:ring-blue-500"
             />
             <span className="capitalize text-gray-700">
@@ -58,7 +58,7 @@ const AmenitiesTab: React.FC<AmenitiesTabProps> = ({
             type="number"
             name="parkingSpaces"
             value={editedProperty.parkingSpaces || ""}
-            onChange={handleChange}
+            onChange={setEditedProperty}
             min="0"
             className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
             placeholder="0"
@@ -73,7 +73,7 @@ const AmenitiesTab: React.FC<AmenitiesTabProps> = ({
             type="number"
             name="hoaFees"
             value={editedProperty.hoaFees || ""}
-            onChange={handleChange}
+            onChange={setEditedProperty}
             min="0"
             step="0.01"
             className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"

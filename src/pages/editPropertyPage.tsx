@@ -6,7 +6,7 @@ import BasicsTab from "../components/editTabs/basicTab";
 import AmenitiesTab from "../components/editTabs/amenitiesTab";
 import MediaTab from "../components/editTabs/mediaTab";
 import DescriptionTab from "../components/editTabs/descriptionTab";
-
+import { Property } from "../../interfaces/IProperty";
 const TABS = ["Basics", "Amenities", "Media", "Description"];
 
 const EditPropertyPage = () => {
@@ -71,8 +71,6 @@ const EditPropertyPage = () => {
             setEditedProperty={setEditedProperty}
           />
         );
-      case "Review":
-        return <ReviewTab editedProperty={editedProperty} />;
       default:
         return null;
     }
@@ -83,7 +81,7 @@ const EditPropertyPage = () => {
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-semibold">Edit Property</h2>
         <button
-          onClick={() => navigate("/dashboard")}
+          onClick={() => navigate("/myproperties")}
           className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
         >
           ← Back

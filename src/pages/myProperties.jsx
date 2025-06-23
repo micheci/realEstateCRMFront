@@ -1,58 +1,65 @@
 import PropertyCard from "../components/propertyCard";
 import { useNavigate } from "react-router-dom";
+import usePropertyStore from "../store/propertyStore";
+import { useEffect } from "react";
 
-const properties = [
-  {
-    _id: "1",
-    title: "Modern Family Home",
-    price: 450000,
-    description: "A beautiful modern home perfect for families.",
-    address: {
-      city: "Austin",
-      state: "TX",
-      zip: "78701",
-    },
-    images: [
-      "/images/house1.jpg",
-      "/images/house2.jpg",
-      "/images/house3.jpg",
-      "/images/house4.jpg",
-    ],
-  },
-  {
-    _id: "2",
-    title: "Downtown Apartment",
-    price: 320000,
-    description: "Stylish apartment in the heart of downtown.",
-    address: {
-      city: "Dallas",
-      state: "TX",
-      zip: "75201",
-    },
-    images: ["/images/apartment1.jpg", "/images/apartment2.jpg"],
-  },
-  {
-    _id: "3",
-    title: "Cozy Country Cottage",
-    price: 275000,
-    description: "Quiet retreat with spacious land and charm.",
-    address: {
-      city: "Waco",
-      state: "TX",
-      zip: "76706",
-    },
-    images: [
-      "/images/cottage1.jpg",
-      "/images/cottage2.jpg",
-      "/images/cottage3.jpg",
-      "/images/cottage4.jpg",
-      "/images/cottage5.jpg",
-    ],
-  },
-];
+// const properties = [
+//   {
+//     _id: "1",
+//     title: "Modern Family Home",
+//     price: 450000,
+//     description: "A beautiful modern home perfect for families.",
+//     address: {
+//       city: "Austin",
+//       state: "TX",
+//       zip: "78701",
+//     },
+//     images: [
+//       "/images/house1.jpg",
+//       "/images/house2.jpg",
+//       "/images/house3.jpg",
+//       "/images/house4.jpg",
+//     ],
+//   },
+//   {
+//     _id: "2",
+//     title: "Downtown Apartment",
+//     price: 320000,
+//     description: "Stylish apartment in the heart of downtown.",
+//     address: {
+//       city: "Dallas",
+//       state: "TX",
+//       zip: "75201",
+//     },
+//     images: ["/images/apartment1.jpg", "/images/apartment2.jpg"],
+//   },
+//   {
+//     _id: "3",
+//     title: "Cozy Country Cottage",
+//     price: 275000,
+//     description: "Quiet retreat with spacious land and charm.",
+//     address: {
+//       city: "Waco",
+//       state: "TX",
+//       zip: "76706",
+//     },
+//     images: [
+//       "/images/cottage1.jpg",
+//       "/images/cottage2.jpg",
+//       "/images/cottage3.jpg",
+//       "/images/cottage4.jpg",
+//       "/images/cottage5.jpg",
+//     ],
+//   },
+// ];
 
 export default function MyProperties() {
   const navigate = useNavigate();
+  const { properties, getAllProperties } = usePropertyStore();
+
+  useEffect(() => {
+    getAllProperties();
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-50">

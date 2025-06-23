@@ -7,7 +7,7 @@ const PropertyCard = ({ property }) => {
   return (
     <div
       className="bg-white rounded-xl shadow-md overflow-hidden cursor-pointer hover:ring-2 hover:ring-blue-300 transition"
-      onClick={() => navigate(`/edit/properties/${property._id}`)}
+      onClick={() => navigate(`/properties/${property._id}`)} // <-- Navigate to DETAIL page on card click
     >
       {/* Top Images Section */}
       <div className="w-full h-48 overflow-hidden">
@@ -25,8 +25,8 @@ const PropertyCard = ({ property }) => {
           <button
             className="text-blue-600 hover:underline text-sm"
             onClick={(e) => {
-              e.stopPropagation();
-              navigate(`/edit/properties/${property._id}`);
+              e.stopPropagation(); // Prevent card click event
+              navigate(`/edit/properties/${property._id}`); // <-- Navigate to EDIT page on button click
             }}
           >
             Edit
@@ -43,7 +43,6 @@ const PropertyCard = ({ property }) => {
           {property.address.zip}
         </div>
 
-        {/* Optional: Preview of extra images below the info */}
         {property.images.length > 1 && (
           <div className="flex gap-2 mt-4">
             {property.images.slice(1, 4).map((img, index) => (
